@@ -1,25 +1,20 @@
-import logo from './logo.svg';
 import './App.css';
 
+import Button from './components/button'
+import Footer from './components/footer'
+import Navbar from './components/navbar'
+
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+  const menuOptions = [
+    <button className="button-simple">SERVIÇOS</button>,
+    <button className="button-simple">ENTRAR</button>,
+    <Button title="SEJA UM PROFISSIONAL"></Button>
+  ]
+
+  return <>
+    <Navbar menuOptions={menuOptions}></Navbar>
+    <Footer></Footer>
+  </>
 }
 
 export default App;

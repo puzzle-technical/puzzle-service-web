@@ -1,0 +1,20 @@
+.footer {
+  background: var(--primary);
+  color: var(--light);
+  display: flex;
+  box-sizing: border-box;
+  padding: 10px 30px;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.elements {
+  display: flex;
+  gap: 15px;
+}
+
+.element {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}

@@ -1,0 +1,15 @@
+.navbar {
+  /* background: tomato; */
+  padding: 20px 30px;
+  box-sizing: border-box;
+  height: 80px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  box-shadow: 0 3px 5px #dadadada;
+}
+
+.menu {
+  display: flex;
+  gap: 10px;
+}
