@@ -1,8 +1,5 @@
 import './index.css';
 
-import Button from '../../components/button'
-import Footer from '../../components/footer'
-import Navbar from '../../components/navbar'
 import Banner from '../../components/banner'
 
 import service1 from '../../assets/img/service1.png'
@@ -11,12 +8,6 @@ import service3 from '../../assets/img/service3.png'
 import { ReactComponent as Star } from '../../assets/icons/star.svg'
 
 function Home() {
-  const menuOptions = [
-    <button className="button-simple">SERVIÇOS</button>,
-    <button className="button-simple">ENTRAR</button>,
-    <Button title="SEJA UM PROFISSIONAL"></Button>
-  ]
-
   const depoimentos = [
     {
       text: 'Melhor plataforma da área para procurar e ofertar serviços. Só tem profissional de qualidade e com comprometimento. Nota 10!',
@@ -44,11 +35,7 @@ function Home() {
   }
 
   return <div className="home">
-    <Navbar menuOptions={menuOptions}></Navbar>
     <Banner></Banner>
-    <div className="area">
-      <h2>BUSCA POR CATEGORIA</h2>
-    </div>
     <div className="area">
       <h2>SERVIÇOS MAIS SOLICITADOS</h2>
       <div className="services">
@@ -81,7 +68,6 @@ function Home() {
         })
       }
     </div>
-    <Footer></Footer>
   </div>
 }
 

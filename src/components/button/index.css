@@ -6,6 +6,9 @@
   color: var(--light);
   transition: all .5s ease;
 }
+.button.full {
+  width: 100%;
+}
 .button:hover {
   cursor: pointer;
   background: var(--primary);

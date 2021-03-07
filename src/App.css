@@ -1,13 +1,17 @@
 html, body {
   margin: 0;
   padding: 0;
-  font-family: 'Montserrat', 'Arial', sans-serif;
 }
 
 * {
+  font-family: 'Montserrat', 'Arial', sans-serif;
   text-decoration: none;
   list-style: none;
   outline: none;
+}
+
+a {
+  color: inherit;
 }
 
 :root {
@@ -15,6 +19,7 @@ html, body {
   --secondary: #24B3B4;
   --lighter: #FEFEFE;
   --light: #F8F8F8;
+  --lightgrey: #9A9A9A;
   --grey: #707070;
   --dark: #3A3A3A;
   --medium: #ACACAC;

@@ -9,7 +9,7 @@ export default function Footer() {
     <div className="elements">
       <div className="element">
         <PhoneIcon width={20} color="#fff"></PhoneIcon>
-        <span>+55 81 9251-9226</span>
+        <span>+55 81 99251-9226</span>
       </div>
       <div className="element">
         <MailIcon width={20} color="#fff"></MailIcon>

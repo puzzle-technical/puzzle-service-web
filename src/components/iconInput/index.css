@@ -1,0 +1,22 @@
+.icon-input {
+  display: grid;
+  grid-template-columns: 15% 70% 15%;
+  border: 1px solid var(--lightgrey);
+  border-radius: 10px;
+  overflow: hidden;
+  align-items: center;
+}
+.icon-input-left, .icon-input-right {
+  box-sizing: border-box;
+  padding: 7.5px 15px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.icon-input-input {
+  text-align: center;
+  border: 0;
+  flex-grow: 1;
+  font-size: 1rem;
+}
