@@ -10,8 +10,8 @@ export default function Navbar(props) {
       <img src={Logo} alt="logo" height={55}></img>
     </a>
     <div className="menu">
-      {menuOptions && menuOptions.map(el => {
-        return el
+      {menuOptions && menuOptions.map((el, index) => {
+        return <span key={index}>{el}</span>
       })}
     </div>
   </div>
