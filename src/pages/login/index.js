@@ -1,6 +1,8 @@
 import './index.css'
 
-import { Link } from 'react-router-dom'
+import { Link, useHistory } from 'react-router-dom'
+
+import { login } from '../../services/auth'
 
 import { useState } from 'react'
 import IconInput from '../../components/iconInput'
@@ -14,9 +16,32 @@ import Logo from '../../assets/img/logo.png'
 export default function Login() {
 
   var [showPassword, setShowPassword] = useState(false)
+  var [email, setEmail] = useState('')
+  var [password, setPassword] = useState('')
+  var [feedback, setFeedback] = useState('')
 
   const toggleShowPassword = () => {
     setShowPassword(!showPassword)
+  }
+
+  const history = useHistory()
+
+  const userLogin = async event => {
+    event.preventDefault()
+    console.log(email, password)
+    const result = await login(email, password)
+    console.log(result)
+    if (result === 1) {
+      history.push('/auth')
+    } else {
+      // window.alert('Email ou senha inválidos')
+      setFeedback('Email ou senha inválidos!')
+      setTimeout(() => {
+        setFeedback('')
+      }, 1000);
+      setPassword('')
+      setEmail('')
+    }
   }
 
   return <div className="login-page">
@@ -24,15 +49,16 @@ export default function Login() {
       <a href="/">
         <img className="login-logo" src={Logo} alt="logo" height={100}></img>
       </a>
-      <form className="login-form">
+      <form className="login-form" onSubmit={userLogin}>
         <div className="login-field">
-          <IconInput type="text" placeholder="Email"
+          <IconInput type="text" placeholder="Email" value={email} onChange={e => setEmail(e.target.value)}
             left={<UserIcon width={20} color="#333"/>}>
           </IconInput>
         </div>
         <div className="login-field">
           <IconInput type={showPassword ? 'text' : 'password'}
             placeholder="Senha"
+            value={password} onChange={e => setPassword(e.target.value)}
             left={<LockIcon width={20} color="#333"/>}
             right={
               <button className="button-simple" type="button" onClick={toggleShowPassword}>
@@ -41,8 +67,9 @@ export default function Login() {
             }>
           </IconInput>
         </div>
+        <p style={{ color: 'red' }}>{feedback}</p>
         <div className="login-field">
-          <Link to="/auth"><Button title="ENTRAR" full></Button></Link>
+          <Button type='submit' title="ENTRAR" full></Button>
         </div>
         <div className="login-field">
           <div className="login-alternative">
