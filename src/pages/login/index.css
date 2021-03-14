@@ -35,3 +35,7 @@
 .login-alternative-link {
   color: var(--lightgrey);
 }
+
+.feedback {
+  color: var(--danger);
+}

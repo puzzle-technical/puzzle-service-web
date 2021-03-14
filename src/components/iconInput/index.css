@@ -1,10 +1,15 @@
 .icon-input {
-  display: grid;
-  grid-template-columns: 15% 70% 15%;
+  width: 100%;
   border: 1px solid var(--lightgrey);
   border-radius: 10px;
   overflow: hidden;
   align-items: center;
+  display: flex;
+}
+
+.icon-input.grid {
+  display: grid;
+  grid-template-columns: 15% 70% 15%;
 }
 .icon-input-left, .icon-input-right {
   box-sizing: border-box;
@@ -15,8 +20,10 @@
 }
 
 .icon-input-input {
-  text-align: center;
   border: 0;
   flex-grow: 1;
   font-size: 1rem;
+}
+.borderless {
+  border: 0;
 }

@@ -1,0 +1,41 @@
+.upload-image {
+  border: 0;
+  border-radius: 50%;
+  width: 150px;
+  height: 150px;
+  overflow: hidden;
+  position: relative;
+}
+
+.upload-image-input {
+  display: none;
+}
+
+.upload-image-preview {
+  width: 100%;
+  height: 100%;
+  background-color: grey;
+  background-size: cover;
+  background-position: center;
+}
+
+.upload-image-button {
+  position: absolute;
+  bottom: 0px;
+  width: 100%;
+  box-sizing: border-box;
+  padding: 10px 10px 20px;
+  text-align: center;
+  transition: all .5s ease;
+  border: 0;
+  background: #000;
+  color: var(--light);
+  opacity: 0;
+}
+.upload-image:hover {
+  cursor: pointer;
+}
+.upload-image:hover .upload-image-button {
+  cursor: pointer;
+  opacity: 0.8;
+}

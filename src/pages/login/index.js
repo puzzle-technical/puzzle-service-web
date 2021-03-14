@@ -31,14 +31,13 @@ export default function Login() {
     console.log(email, password)
     const result = await login(email, password)
     console.log(result)
-    if (result === 1) {
+    if (result.data) {
       history.push('/auth')
     } else {
-      // window.alert('Email ou senha inválidos')
-      setFeedback('Email ou senha inválidos!')
+      setFeedback(result.feedback)
       setTimeout(() => {
         setFeedback('')
-      }, 1000);
+      }, 3000);
       setPassword('')
       setEmail('')
     }
@@ -51,13 +50,19 @@ export default function Login() {
       </a>
       <form className="login-form" onSubmit={userLogin}>
         <div className="login-field">
-          <IconInput type="text" placeholder="Email" value={email} onChange={e => setEmail(e.target.value)}
+          <IconInput type="text" 
+            centralize
+            textAlign="center"
+            placeholder="Email" 
+            value={email} onChange={e => setEmail(e.target.value)}
             left={<UserIcon width={20} color="#333"/>}>
           </IconInput>
         </div>
         <div className="login-field">
           <IconInput type={showPassword ? 'text' : 'password'}
             placeholder="Senha"
+            centralize
+            textAlign="center"
             value={password} onChange={e => setPassword(e.target.value)}
             left={<LockIcon width={20} color="#333"/>}
             right={
@@ -67,14 +72,14 @@ export default function Login() {
             }>
           </IconInput>
         </div>
-        <p style={{ color: 'red' }}>{feedback}</p>
+        <p className="feedback">{feedback}</p>
         <div className="login-field">
           <Button type='submit' title="ENTRAR" full></Button>
         </div>
         <div className="login-field">
           <div className="login-alternative">
             <Link to="" className="login-alternative-link">Esqueceu a senha?</Link>
-            <Link to="" className="login-alternative-link">Cadastre-se →</Link>
+            <Link to="/signUp/0" className="login-alternative-link">Cadastre-se →</Link>
           </div>
         </div>
       </form>

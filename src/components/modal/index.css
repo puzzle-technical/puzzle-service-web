@@ -1,0 +1,78 @@
+.modal-wrapper {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 10;
+  background-color: #00000044;
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.modal {
+  position: relative;
+  top: -10vh;
+  background: var(--lighter);
+  min-width: 30%;
+  max-width: 50%;
+  max-height: 60vh;
+  color: var(--dark);
+  border-radius: 5px;
+  overflow: hidden;
+}
+.modal-header {
+  background: var(--light);
+  border-bottom: 1px solid var(--lightgrey);
+  display: flex;
+  justify-content: space-between;
+  padding: 10px;
+}
+.modal-title {
+  margin: 5px 100px 0 10px;
+  font-weight: normal;
+  font-size: 1.4em;
+}
+.modal-close {
+  border: 0;
+  background: none;
+  color: var(--medium);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding-left: 5px;
+  border-radius: 100px;
+  box-sizing: border-box;
+  width: 30px;
+  height: 30px;
+}
+.modal-close:hover {
+  cursor: pointer;
+}
+
+.modal-content {
+  padding: 10px 20px;
+}
+
+.modal-actions {
+  padding: 10px;
+  display: flex;
+  gap: 5px;
+  justify-content: flex-end;
+  align-items: center;
+}
+
+.modal-button {
+  background: var(--light);
+  border: 1px solid var(--lightgrey);
+  padding: 10px 20px;
+  border-radius: 5px;
+  min-width: 100px;
+}
+.modal-button.active {
+  background: var(--secondary);
+  color: var(--light);
+}
+.modal-button:hover {
+  cursor: pointer;
+}

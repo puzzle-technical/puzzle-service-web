@@ -8,6 +8,7 @@ import {
 
 import Home from './pages/home'
 import Login from './pages/login'
+import SignUp from './pages/signUp'
 
 import Button from './components/button';
 import Navbar from './components/navbar';
@@ -18,7 +19,7 @@ function App() {
   var menuOptions = [
     <Link to="/services" className="button-simple">SERVIÇOS</Link>,
     <Link to="/login" className="button-simple">ENTRAR</Link>,
-    <Button title="SEJA UM PROFISSIONAL"><Link to="/"></Link></Button>,
+    <Link to="/signup/1"><Button title="SEJA UM PROFISSIONAL"></Button></Link>,
   ]
 
   return <Router>
@@ -39,6 +40,9 @@ function App() {
       </Route>
       <Route path="/login">
         <Login/>
+      </Route>
+      <Route path={["/signUp/:type", "/signUp"]}>
+        <SignUp/>
       </Route>
       <Route path="/auth">
         <div>

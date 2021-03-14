@@ -1,0 +1,16 @@
+.loading {
+  width: fit-content;
+  height: fit-content;
+  animation: spin 1s linear;
+  animation-iteration-count: infinite;
+  stroke: var(--primary);
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
