@@ -42,9 +42,10 @@ export default function UserSignUp () {
   const [showModal, setShowModal] = useState()
   const [modalInfo, setModalInfo] = useState({})
   const [loading, setLoading] = useState()
+  const [operationSuccess, setOperationSuccess] = useState()
 
-  const displayAlert = (content, title = 'Atenção') => {
-    setModalInfo({ title, content })
+  const displayAlert = (content, title = 'Atenção', onConfirmation) => {
+    setModalInfo({ title, content, onConfirmation })
     setShowModal(true)
     return
   }
@@ -97,7 +98,6 @@ export default function UserSignUp () {
     setLoading(true)
     if (!formIsValid()) return
     var formData = {
-      cpfUser: cpf,
       nome: nome,
       email: email,
       celular: phone,
@@ -111,19 +111,30 @@ export default function UserSignUp () {
       cep: cep,
       senha: senha
     }
+    formData[userType == 0 ? 'cpfUser': 'cpfProvider'] = cpf
+
     console.log(formData)
-    api.post('/users/create', formData)
+    api.post(`/${userType == 0 ? 'users': 'providers'}/create`, formData)
     .then(res => {
+      setLoading(false)
       console.log(res)
-      if (res.success) history.push('/login')
-      else {
+      if (res.data.success) {
+        displayAlert(<p>{res.data.feedback}</p>, 'Sucesso')
+        setOperationSuccess(true)
+      } else {
         displayAlert(<p>{res.data.feedback}</p>, 'Erro')
       }
     })
     .catch(err => {
+      console.log(err)
+      setLoading(false)
       displayAlert(<p>Algo inesperado aconteceu. Tente novamente mais tarde.</p>, 'Erro')
     })
-    .then(() => setLoading(false))
+  }
+
+  const onModalClose = () => {
+    if (operationSuccess) history.push('/login')
+    setShowModal(false)
   }
 
   const handleTypeChange = e => {
@@ -299,7 +310,7 @@ export default function UserSignUp () {
       </div>
     </section>
   </form>
-  <Modal active={showModal} onClose={() => setShowModal(false)} onConfirmation={modalInfo.onConfirmation} title={modalInfo.title}>
+  <Modal active={showModal} onClose={onModalClose} onConfirmation={modalInfo.onConfirmation} title={modalInfo.title}>
     {modalInfo.content}
   </Modal>
   </>
