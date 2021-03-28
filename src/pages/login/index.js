@@ -1,12 +1,16 @@
 import './index.css'
 
+import { useState } from 'react'
 import { Link, useHistory } from 'react-router-dom'
+import { useDispatch } from 'react-redux'
+import { saveToken } from '../../store/actions/sessionActions'
+import { updateUser } from '../../store/actions/userActions'
 
 import { login } from '../../services/auth'
 
-import { useState } from 'react'
 import IconInput from '../../components/iconInput'
 import Button from '../../components/button'
+import Modal from '../../components/modal'
 
 import { ReactComponent as UserIcon } from '../../assets/icons/user.svg'
 import { ReactComponent as LockIcon } from '../../assets/icons/lock.svg'
@@ -15,31 +19,43 @@ import Logo from '../../assets/img/logo.png'
 
 export default function Login() {
 
+  const history = useHistory()
+  const dispatch = useDispatch()
+
   var [showPassword, setShowPassword] = useState(false)
   var [email, setEmail] = useState('')
   var [password, setPassword] = useState('')
-  var [feedback, setFeedback] = useState('')
+  
+  const [showModal, setShowModal] = useState()
+  const [modalInfo, setModalInfo] = useState({})
+  // const [loading, setLoading] = useState()
+  
+  const displayAlert = (content, title = 'Atenção', onConfirmation) => {
+    setModalInfo({ title, content, onConfirmation })
+    setShowModal(true)
+    return
+  }
 
   const toggleShowPassword = () => {
     setShowPassword(!showPassword)
   }
 
-  const history = useHistory()
+  const onModalClose = () => {
+    setShowModal(false)
+  }
 
   const userLogin = async event => {
     event.preventDefault()
     console.log(email, password)
     const result = await login(email, password)
-    console.log(result)
-    if (result.data) {
-      history.push('/auth')
+    if (!result) return displayAlert('Ocorreu algo inesperado. Tente novamente mais tarde.', 'Erro')
+
+    if (result.success) {
+      dispatch(saveToken(result.data.token))
+      dispatch(updateUser(result.data.user))
+      history.push('/user')
     } else {
-      setFeedback(result.feedback)
-      setTimeout(() => {
-        setFeedback('')
-      }, 3000);
-      setPassword('')
-      setEmail('')
+      return displayAlert(result.feedback, 'Erro')
     }
   }
 
@@ -72,7 +88,6 @@ export default function Login() {
             }>
           </IconInput>
         </div>
-        <p className="feedback">{feedback}</p>
         <div className="login-field">
           <Button type='submit' title="ENTRAR" full></Button>
         </div>
@@ -84,5 +99,8 @@ export default function Login() {
         </div>
       </form>
     </div>
+    <Modal active={showModal} onClose={onModalClose} onConfirmation={modalInfo.onConfirmation} title={modalInfo.title}>
+      {modalInfo.content}
+    </Modal>
   </div>
 }

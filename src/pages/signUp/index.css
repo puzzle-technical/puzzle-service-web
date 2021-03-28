@@ -93,10 +93,6 @@
   background: var(--lightgrey);
 }
 
-.signup-button:hover,.signup-search-button:hover {
-  cursor: pointer;
-}
-
 .row {
   margin: 30px 0;
   display: flex;

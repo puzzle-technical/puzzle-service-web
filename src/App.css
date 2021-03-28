@@ -38,7 +38,9 @@ a {
   src: url("/src/assets/fonts/Montserrat-Bold.otf") format("otf");
 }
 
-
+button:hover, a:hover {
+  cursor: pointer !important;
+}
 
 .button-simple {
   color: var(--secondary);
@@ -47,6 +49,16 @@ a {
   transition: all .5s ease;
 }
 .button-simple:hover {
-  cursor: pointer;
   color: var(--primary);
+}
+
+.main-page {
+  box-sizing: border-box;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+.main-page-content {
+  flex-grow: 1;
 }

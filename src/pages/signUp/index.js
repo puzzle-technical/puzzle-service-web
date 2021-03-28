@@ -52,7 +52,7 @@ export default function UserSignUp () {
 
   const formIsValid = () => {
     // nome
-    if (nome.match(/[^a-zA-Z\s]+/))
+    if (nome.match(/[^a-zA-ZáàâãéèêíïóôõöúçñÁÀÂÃÉÈÍÏÓÔÕÖÚÇÑ\s]+/))
       return displayAlert(<p>
         O nome só pode conter letras e espaços.
       </p>, 'Nome inválido')
@@ -64,7 +64,7 @@ export default function UserSignUp () {
         <br/>
         <br/>- Deve ter entre 5 e 15 caracteres
         <br/>- Deve ter no mínimo um número e uma letra
-        <br/>- Não pode conter caracteres especiais nem espaços.
+        <br/>- Não pode conter caracteres especiais, acentos e nem espaços.
       </p>, 'Senha inválida')
 
     if (senha != senhaConfirm)
@@ -100,6 +100,8 @@ export default function UserSignUp () {
     var formData = {
       nome: nome,
       email: email,
+      tipoUser: userType + 1,
+      cpf: cpf,
       celular: phone,
       dataNasc: data,
       logradouro: logradouro,
@@ -111,10 +113,9 @@ export default function UserSignUp () {
       cep: cep,
       senha: senha
     }
-    formData[userType == 0 ? 'cpfUser': 'cpfProvider'] = cpf
 
     console.log(formData)
-    api.post(`/${userType == 0 ? 'users': 'providers'}/create`, formData)
+    api.post(`/users/create`, formData)
     .then(res => {
       setLoading(false)
       console.log(res)
@@ -134,6 +135,7 @@ export default function UserSignUp () {
 
   const onModalClose = () => {
     if (operationSuccess) history.push('/login')
+    setLoading(false)
     setShowModal(false)
   }
 
@@ -229,7 +231,7 @@ export default function UserSignUp () {
         <div className="signup-field">
           <label>Telefone</label>
           <InputMask value={phone} required onChange={e => setPhone(e.target.value)}
-          mask="(99) 9999-9999" maskChar="_"></InputMask>
+          mask="(99) 99999-9999" maskChar="_"></InputMask>
         </div>
       </div>
     </section>
@@ -292,7 +294,7 @@ export default function UserSignUp () {
       <div className="row">
         <div className="signup-field">
           <label>Informações adicionais</label>
-          <textarea rows="4" value={infoAdicional} onChange={e => setInfoAdicional(e.target.value)} type="text" required></textarea>
+          <textarea rows="4" value={infoAdicional} onChange={e => setInfoAdicional(e.target.value)} type="text"></textarea>
         </div>
       </div>
     </section>}

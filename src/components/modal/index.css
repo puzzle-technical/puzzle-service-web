@@ -73,6 +73,3 @@
   background: var(--secondary);
   color: var(--light);
 }
-.modal-button:hover {
-  cursor: pointer;
-}
