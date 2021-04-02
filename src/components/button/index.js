@@ -1,7 +1,7 @@
 import './index.css'
 
 export default function Button(props) {
-  let { onClick, title, full } = props
+  let { onClick, title, full, type = 'button' } = props
 
-  return <button className={`button ${full && 'full'}`} onClick={onClick}>{title}</button>
+  return <button type={type} className={`button ${full && 'full'}`} onClick={onClick}>{title}</button>
 }

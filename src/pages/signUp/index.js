@@ -1,17 +1,20 @@
 import './index.css'
 import { Link, useHistory, useParams } from 'react-router-dom'
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import InputMask from 'react-input-mask'
 import axios from 'axios'
 
 import api from '../../api'
+import { getUFs, getMunicipios } from './../../services/location'
 
+import Select from 'react-select'
 import IconInput from '../../components/iconInput'
 import Modal from '../../components/modal'
 import Loading from '../../components/loading'
 import Logo from '../../assets/img/logo.png'
 import { ReactComponent as EyeIcon } from '../../assets/icons/eye.svg'
 import { ReactComponent as SearchIcon } from '../../assets/icons/search.svg'
+import UseTerms from './useTerms'
 
 export default function UserSignUp () {
   const { type = 0 } = useParams()
@@ -30,20 +33,66 @@ export default function UserSignUp () {
   const [data, setData] = useState()
   const [phone, setPhone] = useState()
   const [cep, setCep] = useState()
+  
+  const [availableUFs, setAvailableUFs] = useState([])
+  const [selectedUF, setSelectedUF] = useState()
   const [uf, setUf] = useState()
+
   const [cidade, setCidade] = useState()
   const [logradouro, setLogradouro] = useState()
   const [numero, setNumero] = useState()
   const [complemento, setComplemento] = useState()
   const [bairro, setBairro] = useState()
-  const [categorias, setCategorias] = useState()
   const [infoAdicional, setInfoAdicional] = useState()
+
+  const [useTermsChecked, setUseTermsChecked] = useState(false)
+
+  const [availableSubcategories, setAvailableSubcategories] = useState([])
+  const [selectedSubcategories, setSelectedSubcategories] = useState([])
+  const [availableLocations, setAvailableLocations] = useState([])
+  const [selectedLocations, setSelectedLocations] = useState([])
 
   const [showModal, setShowModal] = useState()
   const [modalInfo, setModalInfo] = useState({})
   const [loading, setLoading] = useState()
   const [operationSuccess, setOperationSuccess] = useState()
 
+  useEffect(() => {
+    const load = async () => {
+      await api.get('categories/getSubcategoriesGroups')
+      .then(res => {
+        console.log(res.data);
+        let categoriesGroups = []
+        res.data.data.forEach(cat => {
+          let group = {
+            label: cat.nome,
+            options: cat.subcategories.map(subcat => ({
+              id: subcat.idSubcategory,
+              label: subcat.nome,
+              value: subcat.idSubcategory
+            }))
+          }
+          categoriesGroups.push(group)
+        });
+        console.log(categoriesGroups);
+        setAvailableSubcategories(categoriesGroups)
+      })
+      let ufs = await getUFs()
+      setAvailableUFs(ufs)
+    }
+    load()
+    .catch(err => {
+      console.log(err)
+      setLoading(false)
+    })
+  }, [])
+
+  useEffect(() => {
+    if (!selectedUF) return
+    setUf(selectedUF.value)
+    loadMunicipios(selectedUF.id)
+  }, [selectedUF])
+  
   const displayAlert = (content, title = 'Atenção', onConfirmation) => {
     setModalInfo({ title, content, onConfirmation })
     setShowModal(true)
@@ -79,10 +128,8 @@ export default function UserSignUp () {
       </p>, 'Cpf inválido')
 
     // telefone
-    if (!phone.match(/\(\d{2}\)\s\d{4}-\d{4}/))
-      return displayAlert(<p>
-        Digite todos os dígitos do telefone, incluindo o ddd.
-      </p>, 'Telefone inválido')
+    if (!phone.match(/\(\d{2}\)\s\d{5}-\d{4}/))
+      
 
     // dataNasc
     if (Number(data.split('-')[0]) < 1910 && Number(data.split('-')[0]) < (new Date().getFullYear() - 18))
@@ -90,17 +137,39 @@ export default function UserSignUp () {
         Escolha um ano entre 1910 e {(new Date().getFullYear() - 18)}.
       </p>, 'Data de nascimento inválida')
 
+    // provider
+    if (userType == 1) {
+
+      // subcategories
+      if (!selectedSubcategories || !selectedSubcategories.length) {
+        return displayAlert(<p>
+          Selecione uma ou mais áreas de atuação.
+        </p>, 'Áreas de atuação insuficientes')
+      } 
+
+      // locations
+      if (!selectedLocations || !selectedLocations.length) {
+        return displayAlert(<p>
+          Selecione uma ou mais locais de atuação.
+        </p>, 'Locais de atuação insuficientes')
+      } 
+
+    }
+
     return true
   }
 
   const submit = e => {
+    console.log(selectedLocations);
+    console.log(selectedSubcategories);
     e.preventDefault()
-    setLoading(true)
     if (!formIsValid()) return
+    setLoading(true)
     var formData = {
       nome: nome,
       email: email,
       tipoUser: userType + 1,
+      status: 1,
       cpf: cpf,
       celular: phone,
       dataNasc: data,
@@ -116,14 +185,29 @@ export default function UserSignUp () {
 
     console.log(formData)
     api.post(`/users/create`, formData)
-    .then(res => {
+    .then(async res => {
       setLoading(false)
       console.log(res)
       if (res.data.success) {
-        displayAlert(<p>{res.data.feedback}</p>, 'Sucesso')
+        let success = res.data.feedback
+        let { insertId } = res.data.data
+        for(let subcategory of selectedSubcategories) {
+          await api.post(`users/addSubcategory`, { idUser: insertId, idSubcategory: subcategory.id })
+          .then(res => {
+            if (!res.data.success) return displayAlert(<p>{res.data.feedback}</p>, 'Erro')
+          })
+        }
+        for(let location of selectedLocations) {
+          let loc = { idLocation: location.id, nome: location.value }
+          await api.post(`users/addLocation`, { idUser: insertId, location: loc })
+          .then(res => {
+            if (!res.data.success) return displayAlert(<p>{res.data.feedback}</p>, 'Erro')
+          })
+        }
+        displayAlert(<p>{success}</p>, 'Sucesso')
         setOperationSuccess(true)
       } else {
-        displayAlert(<p>{res.data.feedback}</p>, 'Erro')
+        return displayAlert(<p>{res.data.feedback}</p>, 'Erro')
       }
     })
     .catch(err => {
@@ -150,6 +234,16 @@ export default function UserSignUp () {
     setShowSenhaConfirm(!showSenhaConfirm)
   }
 
+  const loadMunicipios = async id => {
+    let municipios = await getMunicipios(id)
+    setAvailableLocations(municipios.map(muni => {
+      return {
+        idLocation: muni.id,
+        nome: muni.nome
+      }
+    }))
+  }
+
   const buscaCep = async () => {
     if (!cep || cep.length < 8) return
     axios.get(`https://viacep.com.br/ws/${cep.replace(/\D/, '')}/json/`)
@@ -160,9 +254,15 @@ export default function UserSignUp () {
       setComplemento(res.data.complemento)
       setCidade(res.data.localidade)
       setLogradouro(res.data.logradouro)
-      setUf(res.data.uf)
+      
+      let uf = availableUFs.find(el => el.sigla == res.data.uf)
+      setSelectedUF({ id: uf.id, value: uf.sigla, label: uf.sigla })
     })
     .catch(err => console.log(err))
+  }
+
+  const showUseTerms = () => {
+    return displayAlert(<UseTerms/>, 'Termos de uso', () => { setUseTermsChecked(true) })
   }
 
   return <>
@@ -248,13 +348,21 @@ export default function UserSignUp () {
             <SearchIcon width={20} color="#777"/>
           </button>
         </div>
-        <div className="signup-field s25">
-          <label>UF</label>
-          <input type="text" value={uf} id="uf" onChange={e => setUf(e.target.value)} required></input>
-        </div>
         <div className="signup-field">
           <label>Cidade</label>
           <input type="text" value={cidade} id="cidade" onChange={e => setCidade(e.target.value)} required></input>
+        </div>
+        <div className="signup-field s25 uf-select">
+          <label>UF</label>
+          <Select
+            placeholder=""
+            noOptionsMessage={() => 'Sem ufs disponíveis'}
+            value={selectedUF}
+            onChange={value => setSelectedUF(value)}
+            options={availableUFs.map(el => ({ id: el.id, value: el.sigla, label: el.sigla }))}
+            className="basic-multi-select"
+            classNamePrefix="select">
+          </Select>
         </div>
       </div>
       <div className="row">
@@ -266,7 +374,7 @@ export default function UserSignUp () {
       <div className="row">
         <div className="signup-field s25">
           <label>Nº</label>
-          <input type="text" value={numero} id="numero" onChange={e => setNumero(e.target.value)} required></input>
+          <input type="number" value={numero} id="numero" onChange={e => setNumero(e.target.value)} required></input>
         </div>
         <div className="signup-field">
           <label>Complemento</label>
@@ -282,14 +390,38 @@ export default function UserSignUp () {
     {userType == 1 && <section className="signup-section">
       <h2>Trabalho</h2>
       <div className="row">
-        <div className="signup-field">
-          <label>Área de atuação</label>
-          <input type="text" value={categorias} onChange={e => setCategorias(e.target.value)} required></input>
+        <div className="fluid">
+          <h3 className="signup-label">Áreas de atuação</h3>
+          <Select
+            placeholder=""
+            value={selectedSubcategories}
+            isMulti
+            noOptionsMessage={() => 'Sem categorias disponíveis'}
+            options={availableSubcategories}
+            onChange={values => { setSelectedSubcategories(values) }}
+            className="basic-multi-select"
+            classNamePrefix="select">
+          </Select>
         </div>
         {/* <div className="">
           <p>Você tem alguma outra especialização?</p>
           <Link to="#">Propronha um novo serviço.</Link>
         </div> */}
+      </div>      
+      <div className="row">
+        <div className="fluid">
+          <h3 className="signup-label">Locais de atuação</h3>
+          <Select
+            value={selectedLocations}
+            isMulti
+            placeholder=""
+            noOptionsMessage={() => 'Selecione uma UF'}
+            options={availableLocations.map(el => ({ id: el.idLocation, value: el.nome, label: el.nome }))}
+            onChange={values => { setSelectedLocations(values) }}
+            className="basic-multi-select"
+            classNamePrefix="select">
+          </Select>
+        </div>
       </div>
       <div className="row">
         <div className="signup-field">
@@ -302,8 +434,8 @@ export default function UserSignUp () {
     <section className="signup-section">
       <div className="row center">
         <label>
-          <input type="checkbox" required></input>
-          Li e concordo com os <Link to="#">Termos de uso</Link> da Puzzle Service
+          <input type="checkbox" required checked={useTermsChecked} onChange={e => setUseTermsChecked(e.target.checked)}></input>
+          Li e concordo com os <Link to="#" onClick={showUseTerms}>Termos de uso</Link> da Puzzle Service
         </label>
       </div>
       <div className="row center">

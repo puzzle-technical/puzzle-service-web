@@ -37,8 +37,8 @@ export default function UserRouter () {
   ]
 
   const menuOptions = [
-    <Link to="/" className="button-simple">NOVO SERVIÇO</Link>,
-    <Link to="/" className="button-simple">NEGOCIAÇÕES</Link>,
+    <Link to="/" className="button-simple" style={{ paddingBottom: '10px', borderBottom: '2px solid var(--secondary)' }}>NOVO SERVIÇO</Link>,
+    <Link to="/" className="button-simple" style={{ paddingBottom: '10px' }}>NEGOCIAÇÕES</Link>,
     <UserDropDown dropdownOptions={dropdownOptions}/>
   ]
 

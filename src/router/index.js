@@ -25,13 +25,13 @@ export default function RouterView() {
   useEffect(() => {
     const verify = async () => {
       let verify = false
-      if (userHasData())
+      if (user && user != {})
         verify = await verifyUserAuth(token)
       setIsTokenValid(verify)
       setLoading(false)
     }
     verify()
-  })
+  }, [token, user])
 
   const routerComponent = <Router>
     <Switch>

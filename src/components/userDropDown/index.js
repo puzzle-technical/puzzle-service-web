@@ -12,7 +12,8 @@ export default function UserDropDown (props) {
   const [showOptions, setShowOptions] = useState(false)
   const [menuRef, setMenuRef] = useState()
 
-  const imgSrc = user.avatar || DefaultAvatar
+  // const imgSrc = user.avatar || DefaultAvatar
+  const imgSrc = DefaultAvatar
 
   const getStyle = () => {
     switch (position) {
@@ -34,7 +35,8 @@ export default function UserDropDown (props) {
 
   const showMenu = (event) => {
     event.preventDefault()
-    setShowOptions(true)
+    let value = !showOptions
+    setShowOptions(value)
     document.addEventListener('click', closeMenu)
   }
 
@@ -46,7 +48,11 @@ export default function UserDropDown (props) {
   }
 
   return <div className="user-dropdown" ref={el => setMenuRef(el)}>
-    <button className="user-dropdown-button" onClick={showMenu} style={{ backgroundImage: `url(${imgSrc})` }}></button>
+    <button className="user-dropdown-button"
+      onClick={showMenu}
+      style={{ backgroundImage: `url(${imgSrc})` }}>
+    </button>
+    <button className="user-dropdown-username" onClick={showMenu}>{user.nome.split(' ')[0]}</button>
     { showOptions &&
       <div className="user-dropdown-options-wrapper" style={getStyle()}>
         <div className="user-dropdown-options">

@@ -1,10 +1,10 @@
-import api from '../api'
+import axios from 'axios'
 
-export async function login (email, senha) {
+export async function getUFs () {
   let result = undefined
   const setResult = x => { result = x }
 
-  await api.post('/users/login', { email, senha })
+  await axios.get('https://servicodados.ibge.gov.br/api/v1/localidades/estados?orderBy=nome')
   .then(res => {
     console.log(res)
     setResult(res.data)
@@ -13,15 +13,12 @@ export async function login (email, senha) {
   return result
 }
 
-export async function verifyUserAuth (token) {
-  // return true
-  if (!token) return false
 
-  let result = false
+export async function getMunicipios (idUF) {
+  let result = undefined
   const setResult = x => { result = x }
 
-  api.defaults.headers.common['x-access-token'] = token
-  await api.post('/users/validateToken', { token })
+  await axios.get(`https://servicodados.ibge.gov.br/api/v1/localidades/estados/${idUF}/municipios`)
   .then(res => {
     console.log(res)
     setResult(res.data)

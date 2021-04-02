@@ -1,5 +1,8 @@
 .user-dropdown {
   position: relative;
+  display: flex;
+  align-items: center;
+  gap: 5px;
 }
 
 .user-dropdown-button {
@@ -10,7 +13,13 @@
   background-size: contain;
   background-position: center;
 }
-
+.user-dropdown-username {
+  border: 0;
+  background: 0;
+  padding: 0;
+  font-size: 1em;
+  color: var(--primary);
+}
 
 .user-dropdown-button {
   cursor: pointer;
