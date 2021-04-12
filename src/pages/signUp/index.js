@@ -168,7 +168,7 @@ export default function UserSignUp () {
     var formData = {
       nome: nome,
       email: email,
-      tipoUser: userType + 1,
+      tipoUser: userType == 0 ? 'client' : 'provider',
       status: 1,
       cpf: cpf,
       celular: phone,
@@ -197,9 +197,8 @@ export default function UserSignUp () {
             if (!res.data.success) return displayAlert(<p>{res.data.feedback}</p>, 'Erro')
           })
         }
-        for(let location of selectedLocations) {
-          let loc = { idLocation: location.id, nome: location.value }
-          await api.post(`users/addLocation`, { idUser: insertId, location: loc })
+        for(let location of selectedLocations) {  
+          await api.post(`users/addLocation`, { idUser: insertId, nome: location.value })
           .then(res => {
             if (!res.data.success) return displayAlert(<p>{res.data.feedback}</p>, 'Erro')
           })
@@ -348,10 +347,6 @@ export default function UserSignUp () {
             <SearchIcon width={20} color="#777"/>
           </button>
         </div>
-        <div className="signup-field">
-          <label>Cidade</label>
-          <input type="text" value={cidade} id="cidade" onChange={e => setCidade(e.target.value)} required></input>
-        </div>
         <div className="signup-field s25 uf-select">
           <label>UF</label>
           <Select
@@ -363,6 +358,10 @@ export default function UserSignUp () {
             className="basic-multi-select"
             classNamePrefix="select">
           </Select>
+        </div>
+        <div className="signup-field">
+          <label>Cidade</label>
+          <input type="text" value={cidade} id="cidade" onChange={e => setCidade(e.target.value)} required></input>
         </div>
       </div>
       <div className="row">

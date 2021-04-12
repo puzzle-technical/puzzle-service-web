@@ -47,12 +47,12 @@ export default function RouterView() {
         <SignUp/>
       </Route>
       
-      <Route exact path="/user">
+      <Route path="/user">
         { loading ? <LoadingPage/> :
           !userHasData() || !isTokenValid ?
             <Redirect to="/login"/> :
-            user.type == 'provider' ?
-              <ProviderRouter/> :
+            user.tipoUser == 'provider' ?
+              <ProviderRouter user={user}/> :
               <UserRouter/>
         }
       </Route>

@@ -2,6 +2,8 @@ import { useState, useEffect } from 'react'
 import { useSelector } from 'react-redux'
 import { getUser } from '../../store/selectors/userSelectors'
 import api from '../../api'
+import InputMask from 'react-input-mask'
+import axios from 'axios'
 
 import './index.css'
 
@@ -9,8 +11,9 @@ import Button from '../../components/button'
 import ProviderBox from '../../components/providerBox'
 import ProviderBoxMouseover from '../../components/providerBox/mouseover'
 // import Loading from '../../components/loading/'
-import SelectCategories from '../../components/selectCategories'
+import Select from 'react-select'
 import Modal from '../../components/modal'
+import { ReactComponent as SearchIcon } from '../../assets/icons/search.svg'
 
 export default function UserMain () {
   const user = useSelector(getUser)
@@ -18,8 +21,8 @@ export default function UserMain () {
   const [availableProviders, setAvailableProviders] = useState([])
   const [filteredAvailabledProviders, setFilteredAvailabledProviders] = useState([])
   const [selectedProviders, setSelectedProviders] = useState([])
-  const [availableCategories, setAvailableCategories] = useState([])
-  const [selectedCategories, setSelectedCategories] = useState([])
+  const [availableSubcategories, setAvailableSubcategories] = useState([])
+  const [selectedSubcategories, setSelectedSubcategories] = useState([])
   
   // eslint-disable-next-line
   const [loading, setLoading] = useState(true)
@@ -29,8 +32,26 @@ export default function UserMain () {
 
   const [nome, setNome] = useState('')
   const [descricao, setDescricao] = useState('')
-  const [localizacao, setLocalizacao] = useState('')
+    
+  const [cep, setCep] = useState()
+  const [cidade, setCidade] = useState()
+  const [logradouro, setLogradouro] = useState()
+  const [numero, setNumero] = useState()
+  const [complemento, setComplemento] = useState()
+  const [bairro, setBairro] = useState()
 
+  useEffect(() => {
+    for (let provider of selectedProviders) {
+      let isValid = false
+      provider.categories.forEach(cat => {
+        if (selectedSubcategories.map(el => el.id).indexOf(cat.idSubcategory) >= 0) {
+          isValid = true;
+        }
+      })
+      if (!isValid) deselectProvider(provider)
+    }
+    // eslint-disable-next-line 
+  }, [selectedSubcategories, selectedProviders])
 
   useEffect(() => {
     const load = async () => {
@@ -39,18 +60,32 @@ export default function UserMain () {
         let providers = res.data.data
         if (!providers) return
         providers.forEach(async (el, index) => {
-          await api.get(`users/${el.idUser}/getCategories`)
+          await api.get(`users/${el.idUser}/getSubcategories`)
           .then(res => {
             let categories = res.data.data
             providers[index].categories = categories
-            console.log(providers);        
+            // console.log(res.data.data);     
           })
         })
         setAvailableProviders(providers)
       })
-      await api.get('categories/')
+      await api.get('categories/getSubcategoriesGroups')
       .then(res => {
-        setAvailableCategories([...res.data.data])
+        console.log(res.data);
+        let categoriesGroups = []
+        res.data.data.forEach(cat => {
+          let group = {
+            label: cat.nome,
+            options: cat.subcategories.map(subcat => ({
+              id: subcat.idSubcategory,
+              label: subcat.nome,
+              value: subcat.idSubcategory
+            }))
+          }
+          categoriesGroups.push(group)
+        });
+        console.log(categoriesGroups);
+        setAvailableSubcategories(categoriesGroups)
       })
     }
 
@@ -63,12 +98,17 @@ export default function UserMain () {
   }, [])
 
   const resetFields = () => {
-    setSelectedCategories([])
+    setSelectedSubcategories([])
     setSelectedProviders([])
     setFilteredAvailabledProviders([])
     setNome('')
     setDescricao('')
-    setLocalizacao('')
+    setCidade('')
+    setBairro('')
+    setLogradouro('')
+    setNumero('')
+    setComplemento('')
+    setCep('')
   }
 
   const selectProvider = (provider) => {
@@ -88,20 +128,35 @@ export default function UserMain () {
   }
 
   const searchByCategories = async () => {
-    if (!selectedCategories || !selectedCategories.length) {
-      setFilteredAvailabledProviders(availableProviders)
+    if (!selectedSubcategories || !selectedSubcategories.length) {
+      setFilteredAvailabledProviders([])
       return
     }
-    let categoriesIds = selectedCategories.map(el => el.id)
+    let subcategoriesIds = selectedSubcategories.map(el => el.id)
     setLoading(true)
-    await api.post('users/findProvidersByCategories', { categoriesIds })
+    await api.post('users/findProvidersBySubcategories', { subcategoriesIds })
     .then(res => {
+      console.log(res.data);
       let newUsersIds = res.data.data.map(el => el.idUser)
       let newAvailableProviders = availableProviders.filter(el => newUsersIds.indexOf(el.idUser) >= 0)
       setFilteredAvailabledProviders(newAvailableProviders)
     })
     .catch(err => { console.log(err) })
     setLoading(false)
+  }
+
+  const buscaCep = async () => {
+    if (!cep || cep.length < 8) return
+    axios.get(`https://viacep.com.br/ws/${cep.replace(/\D/, '')}/json/`)
+    .then(res => {
+      console.log(res)
+      setBairro(res.data.bairro)
+      setCep(res.data.cep)
+      setComplemento(res.data.complemento)
+      setCidade(res.data.localidade)
+      setLogradouro(res.data.logradouro)
+    })
+    .catch(err => console.log(err))
   }
 
   const displayAlert = (content, title = 'Atenção', onConfirmation) => {
@@ -116,20 +171,26 @@ export default function UserMain () {
     if (operationSuccess) return true
   }
 
+  const formatReceivers = () => {
+    if (!selectedProviders || !selectedProviders.length) return ''
+    let string = selectedProviders.map(el => el.idUser).join(';')
+    return string
+  }
+
   const submit = (event) => {
     event.preventDefault()
     let data = {
       idUser: user.idUser,
       nome,
       descricao,
-      localizacao,
-      dataPublic: new Date()
+      dataPublic: new Date(),
+      receivers: formatReceivers()
     }
     api.post('services/create', data)
     .then(res => {
       console.log(res)
       setLoading(false)
-      let successFeedback
+      let successFeedback = res.data.feedback
 
       if (!res.data.success) {
         setOperationSuccess(false)
@@ -138,8 +199,29 @@ export default function UserMain () {
       } else successFeedback = res.data.feedback
 
       let idService = res.data.data.insertId
-      selectedCategories.forEach(cat => {
-        api.post('services/addCategory', { idService, idCategory: cat.id })
+      selectedSubcategories.forEach(cat => {
+        api.post('services/addSubcategory', { idService, idSubcategory: cat.id })
+        .then(res => {
+          console.log(res)
+          if (!res.data.success) {
+            setOperationSuccess(false)
+            displayAlert(<p>{res.data.feedback}</p>, 'Erro', resetFields)
+            return
+          } else {
+            setOperationSuccess(true)
+            displayAlert(<p>{successFeedback}</p>, 'Sucesso', resetFields)
+          }
+        })
+        let location = {
+          uf: user.uf,
+          logradouro: logradouro,
+          numero: numero,
+          complemento: complemento,
+          bairro: bairro,
+          cidade: cidade,
+          cep: cep
+        }
+        api.post('services/addLocation', { idService, location })
         .then(res => {
           console.log(res)
           if (!res.data.success) {
@@ -175,45 +257,91 @@ export default function UserMain () {
         placeholder="Descreva o problema que precisa ser resolvido ou serviço que precisa ser feito.">
       </textarea>
       
+      
+      <section className="signup-section">
       <h3 className="subtitle">Informe a localização do serviço</h3>
-      <textarea required className="textarea" value={localizacao} onChange={e => setLocalizacao(e.target.value)}
-        placeholder="Escreva o endereço aonde o serviço deverá ser prestado.">
-      </textarea>
+      <div className="row">
+        <div className="signup-field">
+          <label>CEP</label>
+          <InputMask value={cep} required onChange={e => setCep(e.target.value)}
+          mask="99.999-999" maskChar="_"></InputMask>
+          <button type="button" onClick={buscaCep} className="signup-search-button">
+            <SearchIcon width={20} color="#777"/>
+          </button>
+        </div>
+        <div className="signup-field">
+          <label>Cidade</label>
+          <input type="text" value={cidade} id="cidade" onChange={e => setCidade(e.target.value)} required></input>
+        </div>
+      </div>
+      <div className="row">
+        <div className="signup-field">
+          <label>Logradouro</label>
+          <input type="text" value={logradouro} id="logradouro" onChange={e => setLogradouro(e.target.value)} required></input>
+        </div>
+      </div>
+      <div className="row">
+        <div className="signup-field s25">
+          <label>Nº</label>
+          <input type="number" value={numero} id="numero" onChange={e => setNumero(e.target.value)} required></input>
+        </div>
+        <div className="signup-field">
+          <label>Complemento</label>
+          <input type="text" value={complemento} id="complemento" onChange={e => setComplemento(e.target.value)}></input>
+        </div>
+        <div className="signup-field">
+          <label>Bairro</label>
+          <input type="text" value={bairro} if="bairro" onChange={e => setBairro(e.target.value)} required></input>
+        </div>
+      </div>
+    </section>
 
       <h3 className="subtitle">Selecione as categorias deste serviço</h3>
-      <SelectCategories
-        categories={availableCategories.map(el => ({ id: el.idCategory, value: el.nome, label: el.nome }))}
-        selectedCategories={selectedCategories}
-        onSelectCategories={setSelectedCategories}
-        onSearch={searchByCategories}
-      />
+      <div className="row">
+        <Select
+          placeholder=""
+          value={selectedSubcategories}
+          isMulti
+          noOptionsMessage={() => 'Sem categorias disponíveis'}
+          options={availableSubcategories}
+          onChange={values => { setSelectedSubcategories(values) }}
+          className="basic-multi-select"
+          classNamePrefix="select">
+        </Select>
+        <Button className title="BUSCAR PROFISSIONAIS" onClick={() => searchByCategories()}></Button>
+      </div>
 
+      <h3 className="subtitle">Profissionais selecionados</h3>
       <div className="user-create-service-submition">
         <div>
-          <h3 className="subtitle">Profissionais selecionados</h3>
           <div className="user-create-service-selected-providers">
             {selectedProviders && selectedProviders.length ?
               selectedProviders.map((el, id) => {
                 return <ProviderBoxMouseover key={id}
                 provider={el}
+                categories={el.categories}
                 onDeselect={() => deselectProvider(el)}
                 />
               }) :
               <p>Nenhum profissional selecionado.</p>
             }
           </div>
+          <div>
+            { console.log(selectedProviders) }
+            <p className="send-to">Enviar para 
+              { selectedProviders && selectedProviders.length ?
+                ' ' + selectedProviders.map(el => el.nome.split(' ')[0]).splice(0, 3).join(', ')
+                    + (selectedProviders.length > 3 ? '...' : '') :
+                ' todos os profissionais disponíveis'
+              }
+            </p>
+          </div>
         </div>
-      </div>
         <div>
           <Button title="CRIAR PROPOSTA DE SERVIÇO" type="submit"/>
-          <span className="send-to">Enviar para 
-            { selectedProviders && selectedProviders.length ?
-              ' ' + selectedProviders.map(el => el.nome.split(' ')[0]).splice(0, 3).join(', ')
-                  + (selectedProviders.length > 3 ? '...' : '') :
-              ' todos os profissionais disponíveis'
-            }
-          </span>
         </div>
+      </div>
+      
 
       {!!filteredAvailabledProviders.length && <h3 className="subtitle">Profissionais disponíveis nas categorias selecionadas</h3>}
       <div className="user-create-service-available-providers">
@@ -225,7 +353,7 @@ export default function UserMain () {
               categories={el.categories && el.categories.length ? el.categories : []}
               onSelect={() => selectProvider(el)}>
             </ProviderBox>
-          } else { return <></> }
+          } else { return null }
         })}
       </div>
     </form>

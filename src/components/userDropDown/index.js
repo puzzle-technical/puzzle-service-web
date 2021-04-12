@@ -57,8 +57,8 @@ export default function UserDropDown (props) {
       <div className="user-dropdown-options-wrapper" style={getStyle()}>
         <div className="user-dropdown-options">
           {
-            dropdownOptions.map(el => {
-              return <div className="user-dropdown-option" style={{ textAlign }}>{el}</div>
+            dropdownOptions.map((el, id) => {
+              return <div key={id} className="user-dropdown-option" style={{ textAlign }}>{el}</div>
             })
           }
         </div>

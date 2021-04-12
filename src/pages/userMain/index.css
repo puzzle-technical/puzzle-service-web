@@ -32,15 +32,36 @@
 }
 
 .user-create-service-submition {
+  padding: 20px;
+  border: 1px solid var(--grey);
+  border-radius: 5px;
   margin-bottom: 30px;
   display: flex;
-  align-items: flex-end;
+  align-items: center;
   justify-content: space-between;
 }
+.user-create-service-submition .subtitle{
+  margin-top: 0;
+}
+
 .user-create-service-selected-providers {
   display: flex;
   gap: 20px;
+  margin-bottom: 15px;
 }
 .send-to {
   margin-right: 15px;
+}
+
+.select-cidade {
+  width: 100%;
+}
+.select-cidade .select__control {
+  margin-top: 6px;
+  border: 0 !important;
+  background: transparent !important;
+  outline: 0 !important;
+}
+.basic-multi-select {
+  flex-grow: 1;
 }

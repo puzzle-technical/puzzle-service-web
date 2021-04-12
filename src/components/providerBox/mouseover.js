@@ -44,7 +44,7 @@ export default function ProviderBox (props) {
       </div>
       <p>
         { categories && categories.length ? 
-          'Trabalha com:' + categories.map(el => el.name).join(', ') :
+          'Trabalha com: ' + categories.map(el => el.nome).join(', ') :
           'Sem categorias' }
       </p>
     </div>
