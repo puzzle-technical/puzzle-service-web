@@ -1,11 +1,14 @@
 import './index.css'
 import ServiceBox from '../../components/serviceBox'
 import { useState, useEffect } from 'react'
+import { useSelector } from 'react-redux'
+import { getUser } from '../../store/selectors/userSelectors'
 import api from '../../api'
 import Modal from '../../components/modal'
 
 export default function ProviderMain (props) {
-  const { user } = props
+  const user = useSelector(getUser)
+
   const [servicesToMe, setServicesToMe] = useState([])
   const [filteredServices, setFilteredServices] = useState([])
   const [subcategories, setSubcategories] = useState([])
@@ -92,12 +95,24 @@ export default function ProviderMain (props) {
   }
 
   return <div className="provider-main-page">
-    <h2>Solicitações</h2>
+    {/* <h2>Solicitações</h2>
     {servicesToMe && servicesToMe.length ?
     servicesToMe.map((el, id) => {
       return <ServiceBox key={id} service={el} onSelect={selectService}></ServiceBox>
     }) :
     <p>Nenhum serviço enviado diretamente para você.</p>
+    } */}
+
+    { servicesToMe && servicesToMe.length ?
+      <div>
+        <h2>Solicitações</h2>
+        {
+          servicesToMe.map((el, id) => {
+      return <ServiceBox key={id} service={el} onSelect={selectService}></ServiceBox>
+    })
+        }
+      </div> : 
+      <></>
     }
 
     <br/>

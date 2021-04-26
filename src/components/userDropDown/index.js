@@ -12,8 +12,7 @@ export default function UserDropDown (props) {
   const [showOptions, setShowOptions] = useState(false)
   const [menuRef, setMenuRef] = useState()
 
-  // const imgSrc = user.avatar || DefaultAvatar
-  const imgSrc = DefaultAvatar
+  const imgSrc = user.avatar || DefaultAvatar
 
   const getStyle = () => {
     switch (position) {
@@ -52,13 +51,14 @@ export default function UserDropDown (props) {
       onClick={showMenu}
       style={{ backgroundImage: `url(${imgSrc})` }}>
     </button>
-    <button className="user-dropdown-username" onClick={showMenu}>{user.nome.split(' ')[0]}</button>
+    {/* <button className="user-dropdown-username" onClick={showMenu}>{user.nome.split(' ')[0]}</button> */}
     { showOptions &&
       <div className="user-dropdown-options-wrapper" style={getStyle()}>
         <div className="user-dropdown-options">
+          <h3 className="user-dropdown-name">{user.nome.split(' ')[0]} {user.nome.split(' ')[user.nome.split.length-1]}</h3>
           {
             dropdownOptions.map((el, id) => {
-              return <div key={id} className="user-dropdown-option" style={{ textAlign }}>{el}</div>
+              return <div key={id} className="user-dropdown-option" onClick={() => setShowOptions(false)} style={{ textAlign }}>{el}</div>
             })
           }
         </div>

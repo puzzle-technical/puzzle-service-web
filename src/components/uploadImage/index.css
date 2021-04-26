@@ -1,8 +1,20 @@
+.upload-image-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  padding: 20px;
+  box-sizing: border-box;
+  margin: auto;
+  /* background: chocolate; */
+}
+
 .upload-image {
-  border: 0;
+  /* border: 0; */
+  border: 1px solid var(--grey);
   border-radius: 50%;
-  width: 150px;
-  height: 150px;
+  width: 80px;
+  height: 80px;
   overflow: hidden;
   position: relative;
 }
@@ -19,19 +31,6 @@
   background-position: center;
 }
 
-.upload-image-button {
-  position: absolute;
-  bottom: 0px;
-  width: 100%;
-  box-sizing: border-box;
-  padding: 10px 10px 20px;
-  text-align: center;
-  transition: all .5s ease;
-  border: 0;
-  background: #000;
-  color: var(--light);
-  opacity: 0;
-}
 .upload-image:hover {
   cursor: pointer;
 }

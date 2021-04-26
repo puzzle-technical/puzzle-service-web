@@ -43,6 +43,7 @@ button:hover, a:hover {
 }
 
 .button-simple {
+  position: relative;
   color: var(--secondary);
   border: 0;
   background: transparent;
@@ -50,6 +51,17 @@ button:hover, a:hover {
 }
 .button-simple:hover {
   color: var(--primary);
+}
+
+.button-simple.active::after {
+  content: '';
+  width: 40%;
+  height: 4px;
+  position: absolute;
+  left: 30%;
+  bottom: -10px;
+  border-radius: 10px;
+  background: var(--secondary);
 }
 
 .main-page {

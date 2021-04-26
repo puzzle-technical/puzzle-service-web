@@ -53,7 +53,7 @@
   padding: 10px 20px;
   height: fit-content;
   max-height: 60vh;
-  overflow-y: scroll;
+  overflow-y: auto;
 }
 
 .modal-actions {

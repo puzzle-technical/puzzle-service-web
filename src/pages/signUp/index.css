@@ -97,7 +97,7 @@
 
 .signup-search-button {
   border: 0;
-  border-radius: 0 10px 10px 0;
+  border-radius: 0 5px 5px 0;
   padding: 10px;
   background: var(--lightgrey);
 }

@@ -14,18 +14,18 @@ export async function login (email, senha) {
 }
 
 export async function verifyUserAuth (token) {
-  // return true
-  if (!token) return false
+  return true
+  // if (!token) return false
 
-  let result = false
-  const setResult = x => { result = x }
+  // let result = false
+  // const setResult = x => { result = x }
 
-  api.defaults.headers.common['x-access-token'] = token
-  await api.post('/users/validateToken', { token })
-  .then(res => {
-    console.log(res)
-    setResult(res.data)
-  })
-  .catch(err => { console.log(err) })
-  return result
+  // api.defaults.headers.common['x-access-token'] = token
+  // await api.post('/users/validateToken', { token })
+  // .then(res => {
+  //   console.log(res)
+  //   setResult(res.data)
+  // })
+  // .catch(err => { console.log(err) })
+  // return result
 }

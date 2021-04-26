@@ -1,9 +1,10 @@
-import { Route, Switch, useRouteMatch, Link, useHistory } from "react-router-dom";
+import { Route, Switch, useRouteMatch, Link, useHistory, useLocation } from "react-router-dom";
 import { useDispatch } from 'react-redux'
 import { updateUser } from '../store/actions/userActions'
 import { saveToken } from '../store/actions/sessionActions'
 
 import UserMain from '../pages/userMain'
+import Profile from '../pages/profile'
 
 import { ReactComponent as PenIcon } from '../assets/icons/pen.svg'
 import { ReactComponent as LogoutIcon } from '../assets/icons/logout.svg'
@@ -14,6 +15,7 @@ import UserDropDown from '../components/userDropDown';
 
 export default function UserRouter () {
   const { path } = useRouteMatch()
+  const location = useLocation()
   const history = useHistory()
   const dispatch = useDispatch()
 
@@ -23,8 +25,12 @@ export default function UserRouter () {
     history.push('/login')
   }
 
+  const mainPath = path
+  const profilePath = `${path}/profile`
+  const businessPath = `${path}/services`
+
   const dropdownOptions = [
-    <Link to="/">
+    <Link to={profilePath}>
       <span className="option">
         <PenIcon width={20} height={18} color="inherit" /> Minha conta
       </span>
@@ -37,8 +43,12 @@ export default function UserRouter () {
   ]
 
   const menuOptions = [
-    <Link to={path} className="button-simple" style={{ paddingBottom: '10px', borderBottom: '2px solid var(--secondary)' }}>NOVO SERVIÇO</Link>,
-    <Link to={`${path}/services`} className="button-simple" style={{ paddingBottom: '10px' }}>NEGOCIAÇÕES</Link>,
+    <Link to={mainPath} className={`button-simple ${location.pathname == mainPath ? 'active' : ''}`}>
+      NOVO SERVIÇO
+    </Link>,
+    <Link to={businessPath} className={`button-simple ${location.pathname == businessPath ? 'active' : ''}`}>
+      NEGOCIAÇÕES
+    </Link>,
     <UserDropDown dropdownOptions={dropdownOptions}/>
   ]
 
@@ -47,12 +57,16 @@ export default function UserRouter () {
     <div className="main-page-content">
       <Switch>
 
-        <Route exact path={path}>
+        <Route exact path={mainPath}>
           <UserMain/>
         </Route>
 
-        <Route exact path={`${path}/services`}>
+        <Route exact path={businessPath}>
           <h1>user services</h1>
+        </Route>
+
+        <Route exact path={profilePath}>
+          <Profile></Profile>
         </Route>
 
       </Switch>

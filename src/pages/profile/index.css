@@ -1,0 +1,9 @@
+.personal {
+  /* background: chocolate; */
+  margin: -20px 0 !important;
+}
+
+.personal-data {
+  flex-grow: 1;
+  /* background: coral; */
+}

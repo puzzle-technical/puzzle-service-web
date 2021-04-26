@@ -20,9 +20,18 @@
   font-size: 1em;
   color: var(--primary);
 }
+.user-dropdown-name {
+  white-space: nowrap;
+  margin: -10px 0 10px 0px;
+  padding: 10px 20px;
+  text-align: center;
+  color: var(--dark);
+  background: var(--lightgrey);
+}
 
 .user-dropdown-button {
   cursor: pointer;
+  background-size: cover;
 }
 
 .user-dropdown-options-wrapper {
