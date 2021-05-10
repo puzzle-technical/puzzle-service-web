@@ -1,0 +1,40 @@
+.user-services-page {
+  padding: 30px 50px;
+  color: var(--dark);
+}
+
+.single-service-header {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.single-service-title {
+  margin-left: 15px;
+}
+
+.single-service-date {
+  margin: 0;
+  font-size: .95em;
+  font-style: italic;
+}
+.single-service-back-button:hover, .edit-update-button:hover {
+  cursor: pointer;
+}
+
+.edit-update {
+  display: flex;
+  justify-content: center;
+}
+.edit-buttons {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.user-update-service-providers {
+  margin: 20px 0;
+  display: grid;
+  grid-template-columns: 50% 50%;
+  gap: 15px;
+}

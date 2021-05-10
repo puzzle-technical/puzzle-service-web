@@ -1,0 +1,55 @@
+.proposal {
+  border: 1px solid var(--grey);
+  border-radius: 5px;
+  padding: 20px;
+  margin: 15px 0;
+  display: flex;
+  align-items: flex-start;
+}
+.proposal-provider {
+  width: 33%;
+}
+.proposal-provider-header {
+  display: flex;
+  margin-top: 5px;
+  gap: 15px;
+  align-items: flex-start;
+  /* background: cadetblue; */
+}
+
+.proposal-provider-header p {
+  margin: 0 0 5px;
+}
+
+.proposal-provider-avatar {
+  width: 70px;
+  height: 70px;
+  background-size: cover;
+  border: 1px solid var(--grey);
+  border-radius: 50%;
+  overflow: hidden;
+}
+
+.proposal-content {
+  /* background: burlywood; */
+  border-left: 2px solid var(--medium);
+  margin-left: 15px;
+  padding: 5px 0 5px 25px;
+  flex-grow: 1;
+}
+
+.proposal-title {
+  margin: 0;
+  display: flex;
+  gap: 10px;
+}
+
+.proposal-date {
+  margin: 3px 0;
+  font-size: .86em;
+}
+
+.proposal-descricao {
+  white-space: pre;
+  margin: 20px 0 25px;
+}

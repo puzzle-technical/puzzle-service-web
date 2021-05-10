@@ -14,7 +14,7 @@ export default function ProviderBox (props) {
   const { nome, avaliacao, cidade, uf} = provider
   const [showMouseover, setShowMouseover] = useState(false)
   
-  const imgSrc = user.avatar || DefaultAvatar
+  const imgSrc = provider.avatar || DefaultAvatar
 
   const showPanel = () => {
     setShowMouseover(true)
@@ -51,7 +51,7 @@ export default function ProviderBox (props) {
   </div>
 
   return <div className="provider-circle" onMouseOver={showPanel} onMouseLeave={hidePanel} style={{ backgroundImage: `url(${imgSrc})` }}>
-    <button className="provider-circle-button" onClick={onDeselect}>
+    <button type="button" className="provider-circle-button" onClick={onDeselect}>
       <TimesIcon width={12}/>
     </button>
     <div className="provider-circle-mouseover">

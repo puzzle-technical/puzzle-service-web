@@ -315,7 +315,7 @@ export default function Profile () {
             </div>
             <div className="signup-field">
               <label>Email</label>
-              <input type="email" value={email} onChange={e => setEmail(e.target.value)} required></input>
+              <input type="email" disabled value={email} onChange={e => setEmail(e.target.value)} required></input>
             </div>
           </div>
           <div className="row">

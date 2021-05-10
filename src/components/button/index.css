@@ -12,3 +12,7 @@
 .button:hover {
   background: var(--primary);
 }
+
+.button:disabled {
+  background: var(--lightgrey);
+}

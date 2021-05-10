@@ -32,6 +32,8 @@ export default function UserMain () {
 
   const [nome, setNome] = useState('')
   const [descricao, setDescricao] = useState('')
+  const [status, setStatus] = useState('aberto')
+  const [receiversOnly, setReceiversOnly] = useState(false)
     
   const [cep, setCep] = useState()
   const [cidade, setCidade] = useState()
@@ -109,6 +111,8 @@ export default function UserMain () {
     setNumero('')
     setComplemento('')
     setCep('')
+    setStatus('aberto')
+    setReceiversOnly(false)
   }
 
   const selectProvider = (provider) => {
@@ -179,12 +183,15 @@ export default function UserMain () {
 
   const submit = (event) => {
     event.preventDefault()
+    if (!selectedSubcategories.length) return displayAlert('Selecione alguma categoria para o serviço.', 'Atenção')
     let data = {
       idUser: user.idUser,
       nome,
       descricao,
       dataPublic: new Date(),
-      receivers: formatReceivers()
+      receivers: formatReceivers(),
+      receiversOnly: receiversOnly ? 1 : 0,
+      status
     }
     api.post('services/create', data)
     .then(res => {
@@ -308,10 +315,18 @@ export default function UserMain () {
           className="basic-multi-select"
           classNamePrefix="select">
         </Select>
-        <Button className title="BUSCAR PROFISSIONAIS" onClick={() => searchByCategories()}></Button>
+        <div className="search-providers-button">
+          <Button title="BUSCAR PROFISSIONAIS" onClick={() => searchByCategories()}></Button>
+        </div>
       </div>
 
       <h3 className="subtitle">Profissionais selecionados</h3>
+      <p>
+        <label>
+          <input type="checkbox" value={receiversOnly} onInput={e => setReceiversOnly(e.target.value)}></input>
+          Apenas os profissionais selecionados podem visualizar o serviço.
+        </label>
+      </p>
       <div className="user-create-service-submition">
         <div>
           <div className="user-create-service-selected-providers">
@@ -330,30 +345,31 @@ export default function UserMain () {
             { console.log(selectedProviders) }
             <p className="send-to">Enviar para 
               { selectedProviders && selectedProviders.length ?
-                ' ' + selectedProviders.map(el => el.nome.split(' ')[0]).splice(0, 3).join(', ')
-                    + (selectedProviders.length > 3 ? '...' : '') :
+                ' ' + selectedProviders.map(el => el.nome.split(' ')[0]).splice(0, 5).join(', ')
+                    + (selectedProviders.length > 5 ? '...' : '') :
                 ' todos os profissionais disponíveis'
               }
             </p>
           </div>
         </div>
-        <div>
+        <div className="user-create-service-buttons">
           <Button title="CRIAR PROPOSTA DE SERVIÇO" type="submit"/>
+          <button className="button-simple" onClick={() => setStatus('rascunho')} type="submit">SALVAR COMO RASCUNHO</button>
         </div>
       </div>
       
 
-      {!!filteredAvailabledProviders.length && <h3 className="subtitle">Profissionais disponíveis nas categorias selecionadas</h3>}
+      {filteredAvailabledProviders.length != selectedProviders.length && <h3 className="subtitle">Profissionais disponíveis nas categorias selecionadas</h3>}
       <div className="user-create-service-available-providers">
         {filteredAvailabledProviders
+        .filter(el => selectedProviders.indexOf(el) < 0)
         .map((el, id) => {
-          if (selectedProviders.indexOf(el) < 0) {
-            return <ProviderBox key={id} 
-              provider={el}
-              categories={el.categories && el.categories.length ? el.categories : []}
-              onSelect={() => selectProvider(el)}>
-            </ProviderBox>
-          } else { return null }
+          return <ProviderBox key={id} 
+            selectable
+            provider={el}
+            categories={el.categories}
+            onSelect={() => selectProvider(el)}>
+          </ProviderBox>
         })}
       </div>
     </form>

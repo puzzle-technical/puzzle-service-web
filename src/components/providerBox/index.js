@@ -8,10 +8,10 @@ import { ReactComponent as Star } from '../../assets/icons/star.svg'
 
 export default function ProviderBox (props) {
   const user = useSelector(getUser)
-  const { provider, categories = [], onSelect, alreadySelected } = props
+  const { provider, categories = [], onSelect, alreadySelected, selectable } = props
   const { nome, avaliacao, cidade, uf} = provider
   
-  const imgSrc = user.avatar || DefaultAvatar
+  const imgSrc = provider.avatar || DefaultAvatar
 
   var stars = value => {
     let newArr = []
@@ -24,7 +24,7 @@ export default function ProviderBox (props) {
   return <div className="provider-box">
     <div className="provider-box-profile">
       <div className="provider-box-profile-image" style={{ backgroundImage: `url(${imgSrc})` }}></div>
-      <button className="provider-box-profile-button" onClick={onSelect} disabled={alreadySelected}>{alreadySelected ? 'SELECIONADO' : 'SELECIONAR'}</button>
+      { selectable && <button type="button" className="provider-box-profile-button" onClick={onSelect} disabled={alreadySelected}>{alreadySelected ? 'SELECIONADO' : 'SELECIONAR'}</button>}
     </div>
     <div className="provider-box-info">
       <div className="provider-box-info-header">

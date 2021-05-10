@@ -1,9 +1,13 @@
-import { Route, Switch, useRouteMatch, Link, useHistory, useLocation } from "react-router-dom";
+import { useState } from 'react'
+import { Route, Switch, useRouteMatch, Link, useHistory, useLocation, Redirect } from "react-router-dom";
 import { useDispatch } from 'react-redux'
 import { updateUser } from '../store/actions/userActions'
 import { saveToken } from '../store/actions/sessionActions'
 
-import UserMain from '../pages/userMain'
+import UserCreateService from '../pages/userCreateService'
+import UserServices from '../pages/userServices'
+import UserService from '../pages/userServices/singleService'
+import EditService from '../pages/userServices/editService'
 import Profile from '../pages/profile'
 
 import { ReactComponent as PenIcon } from '../assets/icons/pen.svg'
@@ -27,7 +31,16 @@ export default function UserRouter () {
 
   const mainPath = path
   const profilePath = `${path}/profile`
-  const businessPath = `${path}/services`
+  const createServicePath = `${path}/createService`
+  const singleServicePath = `${path}/service`
+  const editServicePath = `${path}/editService`
+
+  const [selectedService, setSelectedService] = useState()
+  const onSelectService = service => {
+    console.log(service)
+    setSelectedService(service)
+    history.push(singleServicePath)
+  }
 
   const dropdownOptions = [
     <Link to={profilePath}>
@@ -43,10 +56,10 @@ export default function UserRouter () {
   ]
 
   const menuOptions = [
-    <Link to={mainPath} className={`button-simple ${location.pathname == mainPath ? 'active' : ''}`}>
+    <Link to={createServicePath} className={`button-simple ${location.pathname == createServicePath ? 'active' : ''}`}>
       NOVO SERVIÇO
     </Link>,
-    <Link to={businessPath} className={`button-simple ${location.pathname == businessPath ? 'active' : ''}`}>
+    <Link to={mainPath} className={`button-simple ${[mainPath, singleServicePath, editServicePath].indexOf(location.pathname) >= 0 ? 'active' : ''}`}>
       NEGOCIAÇÕES
     </Link>,
     <UserDropDown dropdownOptions={dropdownOptions}/>
@@ -57,12 +70,28 @@ export default function UserRouter () {
     <div className="main-page-content">
       <Switch>
 
-        <Route exact path={mainPath}>
-          <UserMain/>
+        <Route exact path={createServicePath}>
+          <UserCreateService/>
         </Route>
 
-        <Route exact path={businessPath}>
-          <h1>user services</h1>
+        <Route exact path={mainPath}>
+          <UserServices onSelectService={onSelectService}></UserServices>
+        </Route>
+
+        <Route exact path={`${singleServicePath}`}>
+          {
+            selectedService ?  
+            <UserService service={selectedService}></UserService> :
+            <Redirect to={mainPath}></Redirect>
+          }
+        </Route>
+
+        <Route exact path={`${editServicePath}`}>
+          {
+            selectedService ?  
+            <EditService service={selectedService}></EditService> :
+            <Redirect to={mainPath}></Redirect>
+          }
         </Route>
 
         <Route exact path={profilePath}>

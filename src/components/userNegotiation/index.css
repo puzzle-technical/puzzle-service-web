@@ -1,0 +1,41 @@
+.negotiation-box-opened {
+  display: flex;
+  align-items: flex-start;
+}
+
+.negotiation-box-provider {
+  width: 33%;
+  box-sizing: border-box;
+  padding-right: 20px;
+}
+.proposal-provider-button {
+  width: 100%;
+}
+.negotiation-box-budget {
+  flex-grow: 1;
+  padding-left: 25px;
+  border-left: 1px solid var(--medium);
+}
+/* .negotiation-box-header {
+  display: flex;
+  justify-content: flex-start;
+  gap: 15px;
+  align-items: center;
+} */
+.negotiation-box-title {
+  margin: 0;
+  font-size: 1.1em;
+  display: inline-flex;
+  margin-right: 10px;
+}
+.negotiation-box-content {
+  flex-grow: 1;
+}
+
+.negotiation-box-date {
+  font-size: .9em;
+}
+
+.negotiation-box-adress {
+  margin: 5px 0;  
+}
