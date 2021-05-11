@@ -1,9 +1,13 @@
-import { Route, Switch, useRouteMatch, Link, useHistory, useLocation } from "react-router-dom";
+import { useState, useEffect } from 'react'
+import { Route, Switch, useRouteMatch, Link, useHistory, useLocation, Redirect } from "react-router-dom";
 import { useDispatch } from 'react-redux'
 import { updateUser } from '../store/actions/userActions'
 import { saveToken } from '../store/actions/sessionActions'
+import api from '../api'
 
 import ProviderMain from '../pages/providerMain'
+import ProviderServices from '../pages/providerServices'
+import UserService from '../pages/userServices/singleService'
 import Profile from '../pages/profile'
 
 import { ReactComponent as PenIcon } from '../assets/icons/pen.svg'
@@ -22,13 +26,32 @@ export default function UserRouter (props) {
 
   const mainPath = path
   const profilePath = `${path}/profile`
-  const businessPath = `${path}/services`
+  const servicesPath = `${path}/services`
+  const singleServicePath = `${path}/service`
+
+  const [selectedService, setSelectedService] = useState()
+  const onSelectService = service => {
+    console.log(service)
+    setSelectedService(service)
+    history.push(singleServicePath)
+  }
 
   const logout = () => {
     dispatch(saveToken(undefined))
     dispatch(updateUser(undefined))
     history.push('/login')
   }
+  
+  useEffect(() => {
+    const load = async () => {
+      await api.get(`users/findById/${user.idUser}`)
+      .then(res => {
+        if (res.data.success) dispatch(updateUser(res.data.data))
+      })
+      .catch(err => console.log(err))
+    }
+    load()
+  }, [])
 
   const dropdownOptions = [
     <Link to={profilePath}>
@@ -48,7 +71,7 @@ export default function UserRouter (props) {
     <Link to={mainPath} className={`button-simple ${location.pathname == mainPath ? 'active' : ''}`}>
       OFERTAS
     </Link>,
-    <Link to={businessPath} className={`button-simple ${location.pathname == businessPath ? 'active' : ''}`}>
+    <Link to={servicesPath} className={`button-simple ${location.pathname == servicesPath ? 'active' : ''}`}>
       NEGOCIAÇÕES
     </Link>,
     <button className="button-simple">
@@ -68,11 +91,19 @@ export default function UserRouter (props) {
       <Switch>
         
         <Route exact path={mainPath}>
-          <ProviderMain/>
+          <ProviderMain onSelectService={onSelectService}/>
         </Route>
 
-        <Route exact path={businessPath}>
-          <h1>user services</h1>
+        <Route exact path={servicesPath}>
+          <ProviderServices ></ProviderServices>
+        </Route>
+
+        <Route exact path={`${singleServicePath}`}>
+          {
+            selectedService ?  
+            <UserService service={selectedService}></UserService> :
+            <Redirect to={mainPath}></Redirect>
+          }
         </Route>
 
         <Route exact path={profilePath}>

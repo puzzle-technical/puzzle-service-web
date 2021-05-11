@@ -3,7 +3,7 @@ import { ReactComponent as TimesIcon } from '../../assets/icons/times.svg'
 
 export default function Modal (props) {
 
-  const { title, children, active, onClose, onConfirmation } = props
+  const { title, children, active, onClose, onConfirmation, actionTitle = 'OK' } = props
 
   const confirm = () => {
     onClose()
@@ -24,10 +24,10 @@ export default function Modal (props) {
       {onConfirmation ?
       <div className="modal-actions">
         <button className="modal-button" onClick={onClose}>Cancelar</button>
-        <button className="modal-button active" onClick={confirm}>OK</button>
+        <button className="modal-button active" onClick={confirm}>{actionTitle}</button>
       </div> :
       <div className="modal-actions">
-        <button className="modal-button" onClick={onClose}>OK</button>
+        <button className="modal-button" onClick={onClose}>{actionTitle}</button>
       </div>
       }
     </div>

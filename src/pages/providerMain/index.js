@@ -7,6 +7,7 @@ import api from '../../api'
 import Modal from '../../components/modal'
 
 export default function ProviderMain (props) {
+  const { onSelectService } = props
   const user = useSelector(getUser)
 
   const [servicesToMe, setServicesToMe] = useState([])
@@ -90,10 +91,6 @@ export default function ProviderMain (props) {
   }, [filter, subcategories, locations])
   
 
-  const selectService = () => {
-    // console.log('aaaaaaa');
-  }
-
   return <div className="provider-main-page">
     {/* <h2>Solicitações</h2>
     {servicesToMe && servicesToMe.length ?
@@ -108,8 +105,8 @@ export default function ProviderMain (props) {
         <h2>Solicitações</h2>
         {
           servicesToMe.map((el, id) => {
-      return <ServiceBox key={id} service={el} onSelect={selectService}></ServiceBox>
-    })
+            return <ServiceBox key={id} service={el} onSelectService={() => onSelectService(el)}></ServiceBox>
+          })
         }
       </div> : 
       <></>
@@ -172,7 +169,7 @@ export default function ProviderMain (props) {
 
     {filteredServices && filteredServices.length ? 
       filteredServices.map((el, id) => {
-        return <ServiceBox key={id} service={el} onSelect={() => displayAlert()}></ServiceBox>
+        return <ServiceBox key={id} service={el} onSelectService={() => onSelectService(el)}></ServiceBox>
       }) :
       <p>Nenhum serviço encontrado.</p>
     }

@@ -5,7 +5,7 @@ import { ReactComponent as AngleDownIcon } from '../../assets/icons/angle-down.s
 
 export default function Collapse(props) {
   const { options } = props
-  const [current, setCurrent] = useState(undefined)
+  const [current, setCurrent] = useState(options?.length == 1 ? 0 : undefined)
 
   return <div className="collapse">
     <div className="collapse-options">

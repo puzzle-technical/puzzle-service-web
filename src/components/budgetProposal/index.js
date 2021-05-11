@@ -17,7 +17,7 @@ export default function BudgetProposal(props) {
 
   const dropdownOptions = [
     <div onClick={() => {
-      window.location.href = `mailto:${email}?subject = Proposta de orçamento [Puzzle Service]`
+      window.location.href = `https://mail.google.com/mail/u/0/?fs=1&tf=cm&to=${email}&subject = Proposta de orçamento [Puzzle Service]`
     }}>
       Enviar email para {provider.nome.split(' ')[0]}
     </div>,

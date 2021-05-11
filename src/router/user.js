@@ -1,8 +1,10 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Route, Switch, useRouteMatch, Link, useHistory, useLocation, Redirect } from "react-router-dom";
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
+import { getUser } from '../store/selectors/userSelectors'
 import { updateUser } from '../store/actions/userActions'
 import { saveToken } from '../store/actions/sessionActions'
+import api from '../api'
 
 import UserCreateService from '../pages/userCreateService'
 import UserServices from '../pages/userServices'
@@ -18,6 +20,7 @@ import Footer from '../components/footer';
 import UserDropDown from '../components/userDropDown';
 
 export default function UserRouter () {
+  const user = useSelector(getUser)
   const { path } = useRouteMatch()
   const location = useLocation()
   const history = useHistory()
@@ -28,6 +31,17 @@ export default function UserRouter () {
     dispatch(updateUser(undefined))
     history.push('/login')
   }
+
+  useEffect(() => {
+    const load = async () => {
+      await api.get(`users/findById/${user.idUser}`)
+      .then(res => {
+        if (res.data.success) dispatch(updateUser(res.data.data))
+      })
+      .catch(err => console.log(err))
+    }
+    load()
+  }, [])
 
   const mainPath = path
   const profilePath = `${path}/profile`

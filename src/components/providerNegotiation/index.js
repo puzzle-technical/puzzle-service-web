@@ -9,17 +9,15 @@ import Dropdown from '../dropDown'
 import Modal from '../modal'
 import { ReactComponent as EllipsisIcon } from '../../assets/icons/ellipsis-vertical.svg';
 
-export default function UserNegotiation (props) {
-  const { service, active } = props
-  const { idService, nome, descricao, dataPublic, location, subcategories } = service
-  const budget = service.budgets.find(el => el.status == 'selecionado')
-  const provider = budget?.provider
+export default function ProviderNegotiation (props) {
+  const { budget, active } = props
+  const { service, provider, descricao, dataPublic, location } = budget
   const imgSrc = provider?.avatar || DefaultAvatar
   const history = useHistory()
 
   const element = <EllipsisIcon height={20}></EllipsisIcon>
 
-  const dropdownOptions = [    
+  const dropdownOptions = [ 
     <div onClick={() => {
       displayAlert('Tem certeza que deseja cancelar esta negociação?\nO serviço voltará a ficar aberto para novas propostas.', '', () => {
         cancelNegotiation()
@@ -51,10 +49,9 @@ export default function UserNegotiation (props) {
             <p>{provider?.email}</p>
             <p>{provider?.celular}</p>
           </div>
-        </div>
-        <p>{ subcategories && subcategories.length && `Trabalha com: ${subcategories.map(el => el.nome).join(', ')}` }</p>
+        </div><br/>
         <button className="proposal-provider-button button" onClick={() => {
-          window.location.href = `https://mail.google.com/mail/u/0/?fs=1&tf=cm&to=${provider?.email}&subject = Proposta de orçamento [Puzzle Service]`
+          window.location.href = `https://mail.google.com/mail/u/0/?fs=1&tf=cm&to=${provider?.email}&subject=Proposta de orçamento [Puzzle Service]`
         }}>
           ENVIAR EMAIL PARA {provider?.nome.split(' ')[0].toUpperCase()}
         </button>
@@ -62,33 +59,33 @@ export default function UserNegotiation (props) {
 
       <div className="negotiation-box-budget">
         <div className="negotiation-box-header">
-          <h4 className="negotiation-box-title">{nome}</h4>
-          <span className="negotiation-box-date">{(new Date(dataPublic)).toLocaleString()}</span>
-          <p className="negotiation-box-adress">{location ? `${location.bairro} - ${location.cidade}` : ''}</p>
+          <h4 className="negotiation-box-title">{service?.nome}</h4>
+          <span className="negotiation-box-date">{(new Date(service?.dataPublic)).toLocaleString()}</span>
+          <p className="negotiation-box-adress">{service?.location ? `${service?.location.bairro} - ${service?.location.cidade}` : ''}</p>
         </div>
-        <p>{descricao}</p>
+        <p>{service?.descricao}</p>
         <br/>
         <div className="negotiation-box-proposal">
           <h4 className="proposal-title">
             <span>Proposta de orçamento</span>
             <CommentIcon width={18}></CommentIcon>
           </h4>
-          <p className="proposal-date">{(new Date(budget?.dataPublic)).toLocaleString()}</p>
-          <p className="proposal-descricao">{budget?.descricao}</p>
+          <p className="proposal-date">{(new Date(dataPublic)).toLocaleString()}</p>
+          <p className="proposal-descricao">{descricao}</p>
         </div>
       </div>
 
-      <buton className="negotiation-box-button">
+      { budget.status == 'selecionado' && <button className="negotiation-box-button">
         <Dropdown element={element} dropdownOptions={dropdownOptions} textAlign="right"></Dropdown>
-      </buton>
+      </button>}
     </div>
   )
 
   const closedBox = (
     <div className="negotiation-box-header">
-      <h4 className="negotiation-box-title">{nome}</h4>
+      <h4 className="negotiation-box-title">{service?.nome}</h4>
       <span className="negotiation-box-date">{(new Date(dataPublic)).toLocaleString()}</span>
-      <p className="negotiation-box-adress">{location ? `${location.bairro} - ${location.cidade}` : ''}</p>
+      <p className="negotiation-box-adress">{service?.location ? `${service?.location.bairro} - ${service?.location.cidade}` : ''}</p>
     </div>
   )
 

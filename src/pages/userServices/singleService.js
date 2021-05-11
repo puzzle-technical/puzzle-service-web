@@ -2,11 +2,15 @@ import './index.css'
 import { useState } from 'react'
 import { ReactComponent as BackIcon } from '../../assets/icons/arrow-left.svg';
 import { useHistory } from 'react-router-dom'
-import BudgetProposal from '../../components/budgetProposal'
+import { useSelector } from 'react-redux'
+import { getUser } from '../../store/selectors/userSelectors'
 import api from '../../api'
 import Modal from '../../components/modal'
+import BudgetProposal from '../../components/budgetProposal'
+import CreateBudget from '../../components/createBudget'
 
 export default function UserServices(props) {
+  const user = useSelector(getUser)
   const { service } = props
   const { idService, nome, descricao, status, dataPublic, location, subcategories, budgets  } = service
   const history = useHistory()
@@ -65,14 +69,25 @@ export default function UserServices(props) {
         </p>
       </div>
       <br/><br/>
-      <h3>Propostas recebidas</h3>
-      {
-        !budgetProposals.length > 0 ? <p>Nenhuma proposta foi feita ainda.</p> :
-        budgetProposals.map((budget, id) => {
-          return <BudgetProposal key={id} budget={budget} disabled={status == 'fechado'}
-          onRemove={() => removeProposal(id)}
-          onSelect={() => selectProposal(budget.idBudget)}></BudgetProposal>
-        })
+      
+      { user.tipoUser == 'provider' ?
+
+        <div>
+          <br/>
+          <CreateBudget service={service} user={user}></CreateBudget>
+        </div> :
+
+        <div>
+          <h3>Propostas recebidas</h3>
+          {
+            !budgetProposals.length > 0 ? <p>Nenhuma proposta foi feita ainda.</p> :
+            budgetProposals.map((budget, id) => {
+              return <BudgetProposal key={id} budget={budget} disabled={status == 'fechado'}
+              onRemove={() => removeProposal(id)}
+              onSelect={() => selectProposal(budget.idBudget)}></BudgetProposal>
+            })
+          }
+        </div>
       }
     </div>
     <Modal active={showModal} onClose={() => setShowModal(false)} onConfirmation={modalInfo.onConfirmation} title={modalInfo.title}>

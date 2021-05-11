@@ -342,7 +342,6 @@ export default function UserMain () {
             }
           </div>
           <div>
-            { console.log(selectedProviders) }
             <p className="send-to">Enviar para 
               { selectedProviders && selectedProviders.length ?
                 ' ' + selectedProviders.map(el => el.nome.split(' ')[0]).splice(0, 5).join(', ')
