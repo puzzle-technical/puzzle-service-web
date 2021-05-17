@@ -62,3 +62,9 @@
   color: #22d157;
   font-weight: bold;
 }
+
+.points-success-payment {
+  text-align: center;
+  color: var(--dark);
+  margin-top: 180px;
+}
