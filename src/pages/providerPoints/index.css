@@ -1,0 +1,64 @@
+.points-page {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 7%;
+  height: 45vh;
+  min-height: 280px;
+  padding: 70px 0;
+}
+
+.pack {
+  border: 1px solid var(--grey);
+  border-radius: 10px;
+  overflow: hidden;
+  padding: 20px;
+  min-width: 200px;
+  height: 100%;
+  display: grid;
+  grid-template-rows: 60px 50px 50px auto 50px;
+  text-align: center;
+  color: var(--dark);
+}
+
+.pack-background {
+  background: var(--secondary);
+  position: relative;
+  left: -20px;
+  top: -20px;
+  width: calc(100% + 40px);
+  height: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+}
+
+.pack-background img {
+  position: relative;
+  top: 20px;
+  height: 40px;
+}
+
+.pack-title {
+  font-size: 20px;
+  font-weight: normal;
+  margin: 0;
+}
+
+.pack-description {
+  font-size: 16px;
+  font-weight: bold;
+  margin: 0;
+}
+
+.pack-price {
+  font-size: 32px;
+  margin: 0;
+}
+
+.pack-discount {
+  font-size: 14px;
+  margin: 5px;
+  color: #22d157;
+  font-weight: bold;
+}

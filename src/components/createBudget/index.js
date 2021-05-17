@@ -58,7 +58,7 @@ export default function CreateBudget(props) {
         </button>
       </div>
       <div className="modal-content">
-        <textarea value={text} onChange={e => setText(e.target.value)} required className="create-budget-textarea" placeholder="Escreva a sua proposta"></textarea>
+        <textarea maxLength={300} value={text} onChange={e => setText(e.target.value)} required className="create-budget-textarea" placeholder="Escreva a sua proposta"></textarea>
       </div>
       <div className="modal-actions">
         <button className="modal-button" onClick={onClose}>Cancelar</button>

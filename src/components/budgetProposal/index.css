@@ -22,8 +22,9 @@
 }
 
 .proposal-provider-avatar {
-  width: 70px;
-  height: 70px;
+  display: inline-block;
+  width: 50px;
+  height: 50px;
   background-size: cover;
   border: 1px solid var(--grey);
   border-radius: 50%;

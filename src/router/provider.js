@@ -6,6 +6,8 @@ import { saveToken } from '../store/actions/sessionActions'
 import api from '../api'
 
 import ProviderMain from '../pages/providerMain'
+import ProviderNegotiations from '../pages/providerNegotiations'
+import ProviderPoints from '../pages/providerPoints'
 import ProviderServices from '../pages/providerServices'
 import UserService from '../pages/userServices/singleService'
 import Profile from '../pages/profile'
@@ -27,7 +29,9 @@ export default function UserRouter (props) {
   const mainPath = path
   const profilePath = `${path}/profile`
   const servicesPath = `${path}/services`
+  const negotiationsPath = `${path}/negotiations`
   const singleServicePath = `${path}/service`
+  const pointsPath = `${path}/points`
 
   const [selectedService, setSelectedService] = useState()
   const onSelectService = service => {
@@ -71,10 +75,13 @@ export default function UserRouter (props) {
     <Link to={mainPath} className={`button-simple ${location.pathname == mainPath ? 'active' : ''}`}>
       OFERTAS
     </Link>,
-    <Link to={servicesPath} className={`button-simple ${location.pathname == servicesPath ? 'active' : ''}`}>
+    <Link to={negotiationsPath} className={`button-simple ${location.pathname == negotiationsPath ? 'active' : ''}`}>
       NEGOCIAÇÕES
     </Link>,
-    <button className="button-simple">
+    <Link to={servicesPath} className={`button-simple ${location.pathname == servicesPath ? 'active' : ''}`}>
+      SERVIÇOS SALVOS
+    </Link>,
+    <Link to={pointsPath} className={`button-simple ${location.pathname == pointsPath ? 'active' : ''}`}>
       <div style={{ display: "flex", alignItems: "center", gap: "5px" }}>
         <img src={puzzlePoint} alt="puzzle points" width="20px"></img>
         <span>
@@ -82,7 +89,7 @@ export default function UserRouter (props) {
           <span style={{ color: "#E2A11E", fontSize: "1.1em" }}> {user.puzzlePoints || 0}</span>
         </span>
       </div>  
-    </button>,
+    </Link>,
     <UserDropDown dropdownOptions={dropdownOptions}/>
   ]
   return <div className="main-page">
@@ -94,8 +101,12 @@ export default function UserRouter (props) {
           <ProviderMain onSelectService={onSelectService}/>
         </Route>
 
+        <Route exact path={negotiationsPath}>
+          <ProviderNegotiations ></ProviderNegotiations>
+        </Route>
+
         <Route exact path={servicesPath}>
-          <ProviderServices ></ProviderServices>
+          <ProviderServices onSelectService={onSelectService}></ProviderServices>
         </Route>
 
         <Route exact path={`${singleServicePath}`}>
@@ -104,6 +115,10 @@ export default function UserRouter (props) {
             <UserService service={selectedService}></UserService> :
             <Redirect to={mainPath}></Redirect>
           }
+        </Route>
+        
+        <Route exact path={pointsPath}>
+          <ProviderPoints></ProviderPoints>
         </Route>
 
         <Route exact path={profilePath}>

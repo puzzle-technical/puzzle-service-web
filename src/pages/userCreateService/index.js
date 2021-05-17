@@ -177,7 +177,7 @@ export default function UserMain () {
 
   const formatReceivers = () => {
     if (!selectedProviders || !selectedProviders.length) return ''
-    let string = selectedProviders.map(el => el.idUser).join(';')
+    let string = selectedProviders.map(el => el.idUser).reduce((acc, curr) => acc += `${curr};`, '')
     return string
   }
 
@@ -260,7 +260,7 @@ export default function UserMain () {
       </input>
 
       <h3 className="subtitle">Descrição do serviço</h3>
-      <textarea required className="textarea" value={descricao} onChange={e => setDescricao(e.target.value)}
+      <textarea required className="textarea" maxLength={300} value={descricao} onChange={e => setDescricao(e.target.value)}
         placeholder="Descreva o problema que precisa ser resolvido ou serviço que precisa ser feito.">
       </textarea>
       

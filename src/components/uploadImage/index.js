@@ -2,10 +2,10 @@ import './index.css'
 import { useState } from "react"
 
 export default function UploadImage (props) {
-  const { imgSrc, onInput } = props
-
+  const { imgSrc, onInput, onMaxSize } = props
   const [imgUrl, setImageUrl] = useState(imgSrc)
   const [input, setinput] = useState()
+  const maxSize = 3 * 1024 * 1024
   
   const triggerInput = () => {
     input.click()
@@ -13,6 +13,8 @@ export default function UploadImage (props) {
   const handleInput = e => {
     let file = e.target.files[0]
     if (!file) return
+    // console.log(file)
+    if (file.size > maxSize) return onMaxSize && onMaxSize()
     setImageUrl(URL.createObjectURL(file))
     if (onInput) {
       onInput(file)

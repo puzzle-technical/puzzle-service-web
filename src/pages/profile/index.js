@@ -302,7 +302,10 @@ export default function Profile () {
         <div className="row">
           <div className="signup-field">
             <label>Imagem de perfil</label>
-            <UploadImage imgSrc={avatar || DefaultAvatar} onInput={value => setAvatarFile(value)}></UploadImage>
+            <UploadImage imgSrc={avatar || DefaultAvatar} onInput={value => setAvatarFile(value)}
+            onMaxSize={() => {
+              displayAlert('Escolha uma imagem de até 3MB de tamanho.')
+            }}></UploadImage>
           </div>
         </div>
 

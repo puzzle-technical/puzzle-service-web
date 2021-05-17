@@ -1,7 +1,9 @@
 import './index.css'
 import ServiceBox from '../../components/serviceBox'
+import { useHistory } from 'react-router-dom'
 import { useState, useEffect } from 'react'
-import { useSelector } from 'react-redux'
+import { useSelector, useDispatch } from 'react-redux'
+import { updateUser } from '../../store/actions/userActions'
 import { getUser } from '../../store/selectors/userSelectors'
 import api from '../../api'
 import Modal from '../../components/modal'
@@ -9,6 +11,10 @@ import Modal from '../../components/modal'
 export default function ProviderMain (props) {
   const { onSelectService } = props
   const user = useSelector(getUser)
+  const dispatch = useDispatch()
+  const history = useHistory()
+
+  const [servicePoints, setServicePoints] = useState()
 
   const [servicesToMe, setServicesToMe] = useState([])
   const [filteredServices, setFilteredServices] = useState([])
@@ -20,22 +26,55 @@ export default function ProviderMain (props) {
   const [showModal, setShowModal] = useState()
   const [modalInfo, setModalInfo] = useState({})
 
+
   const displayAlert = (content, title = 'Atenção', onConfirmation) => {
     setModalInfo({ title, content, onConfirmation })
     setShowModal(true)
     return
   }
 
+  const openService = (service) => {
+    servicePoints > user.puzzlePoints ?
+    displayAlert(<div>
+      <p>Você não possui <strong>PuzzlePoints</strong> suficientes.</p>
+      <button className="button">Adquirir PuzzlePoints</button>
+    </div>, 'Pontos insuficientes') :
+    displayAlert(<div>
+      <p>Você irá gastar <strong>PuzzlePoints</strong> para esta ação.</p>
+      <p>Tem certeza que deseja continuar?</p>
+    </div>, 'Atenção', async () => {
+      await api.post(`users/openService`, { idService: service.idService, idUser: user.idUser })
+      .then(res => {
+        displayAlert(res.data.feedback, res.data.success ? 'Sucesso' : 'Erro', !res.data.success ? '' : () => {
+          reloadUserInfo()
+          onSelectService(service)
+          history.push('/user/service')
+        })
+      })
+      .catch(err => {
+        console.log(err)
+        displayAlert('Ocorreu algo errado. Tente novamente mais tarde.', 'Erro')
+      })
+    })   
+  }
+
+  const reloadUserInfo = async () => {
+    await api.get(`users/findById/${user.idUser}`)
+    .then(res => {
+      console.log(res)
+      if (res.data.success) {
+        dispatch(updateUser(res.data.data))
+      }
+    })
+    .catch(err => console.log(err))
+  }
+
   useEffect(() => {
-    const loadServicesToMe = async () => {
+    const load = async () => {
       await api.get(`services/toUser/${user.idUser}`)
       .then(res => {
         setServicesToMe(res.data.data)
       })
-      .catch(err => console.log(err))
-    }
-
-    const load = async () => {
       await api.get(`users/${user.idUser}/getSubcategories`)
       .then(async res => {
         setSubcategories(res.data.data)
@@ -44,10 +83,13 @@ export default function ProviderMain (props) {
           setLocations(res.data.data)
         })
       })
-      .catch(err => console.log(err))
+      await api.get(`points/getServicePoints`)
+      .then(res => {
+        setServicePoints(res.data.data)
+      })
     }
     load()
-    loadServicesToMe()
+    .catch(err => console.log(err))
     // eslint-disable-next-line 
   }, [])
 
@@ -62,7 +104,7 @@ export default function ProviderMain (props) {
       }
 
       let subcategoriesIds = subcategories.map(el => el.idSubcategory)
-      api.post('services/findBySubcategories', { subcategoriesIds })
+      api.post('services/findBySubcategories', { subcategoriesIds, idUser: user.idUser })
       .then(res => {
         console.log(res.data);
         setFilteredServices(res.data.data)
@@ -77,7 +119,7 @@ export default function ProviderMain (props) {
       }
 
       let locationsNames = locations.map(el => el.nome)
-      api.post('services/findByLocations', { locations: locationsNames })
+      api.post('services/findByLocations', { locations: locationsNames, idUser: user.idUser })
       .then(res => {
         console.log(res.data);
         setFilteredServices(res.data.data)
@@ -92,24 +134,15 @@ export default function ProviderMain (props) {
   
 
   return <div className="provider-main-page">
-    {/* <h2>Solicitações</h2>
-    {servicesToMe && servicesToMe.length ?
-    servicesToMe.map((el, id) => {
-      return <ServiceBox key={id} service={el} onSelect={selectService}></ServiceBox>
-    }) :
-    <p>Nenhum serviço enviado diretamente para você.</p>
-    } */}
-
-    { servicesToMe && servicesToMe.length ?
+    { servicesToMe &&
       <div>
-        <h2>Solicitações</h2>
+        {servicesToMe.length ? <h2>Solicitações</h2> : ''}
         {
           servicesToMe.map((el, id) => {
-            return <ServiceBox key={id} service={el} onSelectService={() => onSelectService(el)}></ServiceBox>
+            return <ServiceBox key={id} service={el} servicePoints={servicePoints} onSelectService={() => openService(el)}></ServiceBox>
           })
         }
-      </div> : 
-      <></>
+      </div>
     }
 
     <br/>
@@ -132,44 +165,11 @@ export default function ProviderMain (props) {
       }
     </h4>
     <br/>
-    {/* <div className="pesquisa-select">
-      <div className="select">
-        { filter == 0 ?
-          // categorias
-          <div> 
-            <Select
-              placeholder="Selecione uma ou mais categorias"
-              value={selectedSubcategories}
-              isMulti
-              noOptionsMessage={() => 'Sem categorias disponíveis'}
-              options={availableSubcategories}
-              onChange={values => { setSelectedSubcategories(values) }}
-              className="basic-multi-select"
-              classNamePrefix="select">
-            </Select>
-          </div> :
-          // localização
-          <div> 
-            <Select
-              placeholder="Selecione uma ou mais locais"
-              value={selectedLocations}
-              isMulti
-              noOptionsMessage={() => 'Sem locais disponíveis'}
-              options={availableLocations}
-              onChange={values => { selectedLocations(values) }}
-              className="basic-multi-select"
-              classNamePrefix="select">
-            </Select>
-          </div>
-        }
-      </div>
-      <Button title="PESQUISAR"></Button>
-    </div> */}
 
 
-    {filteredServices && filteredServices.length ? 
+    {filteredServices.length ? 
       filteredServices.map((el, id) => {
-        return <ServiceBox key={id} service={el} onSelectService={() => onSelectService(el)}></ServiceBox>
+        return <ServiceBox key={id} service={el} servicePoints={servicePoints} onSelectService={() => openService(el)}></ServiceBox>
       }) :
       <p>Nenhum serviço encontrado.</p>
     }

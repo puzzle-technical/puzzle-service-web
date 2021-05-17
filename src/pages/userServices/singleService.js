@@ -8,18 +8,15 @@ import api from '../../api'
 import Modal from '../../components/modal'
 import BudgetProposal from '../../components/budgetProposal'
 import CreateBudget from '../../components/createBudget'
+import defaultAvatar from '../../assets/img/defaultAvatar.png'
 
 export default function UserServices(props) {
   const user = useSelector(getUser)
   const { service } = props
-  const { idService, nome, descricao, status, dataPublic, location, subcategories, budgets  } = service
+  const { idService, nome, descricao, status, dataPublic, location, subcategories, budgets, user: serviceUser } = service
   const history = useHistory()
 
   const [budgetProposals, setBudgetProposals] = useState(budgets)
-
-  const goBack = () => {
-    history.push('/user')
-  }
 
   const removeProposal = id => {
     let newBudgets = [].concat(budgetProposals)
@@ -38,7 +35,7 @@ export default function UserServices(props) {
         if (!res.data.success) return displayAlert(res.data.feedback, 'Erro')
       })
       displayAlert(feedback, 'Success')
-      goBack()
+      history.push('/user')
     })
     .catch(err => console.log(err))
   }
@@ -52,11 +49,24 @@ export default function UserServices(props) {
     return
   }
 
+  const userInfo = (() => {
+    if (!serviceUser) return <p></p>
+    let { nome, email, celular, avatar } = user
+    let imgSrc = avatar || defaultAvatar
+    return <div className="service-box-user-info">
+      <div className="service-box-user-avatar" style={{ backgroundImage: `url(${imgSrc})`}}></div>
+      <div>
+        <p>{nome}</p>
+        <p>{email}</p>
+        <p>{celular}</p>
+      </div>
+    </div>
+  })()
+
   return <div className="user-services-page">
     
     <div className="single-service-info">
       <div className="single-service-header">
-        <div className="single-service-back-button" onClick={goBack}><BackIcon width={15}></BackIcon></div>
         <h3 className="single-service-title">{nome}</h3>
         <span className="single-service-date">{(new Date(dataPublic)).toLocaleString()}</span>
       </div>
@@ -73,7 +83,8 @@ export default function UserServices(props) {
       { user.tipoUser == 'provider' ?
 
         <div>
-          <br/>
+          {userInfo}
+          <br/><br/>
           <CreateBudget service={service} user={user}></CreateBudget>
         </div> :
 

@@ -1,10 +1,10 @@
 .negotiation-box-opened {
-  display: flex;
+  display: grid;
+  grid-template-columns: 30% 68% 2%;
   align-items: flex-start;
 }
 
 .negotiation-box-provider {
-  width: 33%;
   box-sizing: border-box;
   padding-right: 20px;
 }

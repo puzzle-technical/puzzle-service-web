@@ -53,7 +53,7 @@ export default function ServiceBox (props) {
     return
   }
 
-  return <div className="service-box">
+  return <div className="service-box user">
     <div className="service-box-info" onClick={onSelect}>
       <div className="service-box-header">
         <h4 className="service-box-title">{nome}</h4>

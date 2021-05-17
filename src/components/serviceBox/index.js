@@ -1,15 +1,21 @@
 import './index.css'
-import React from 'react'
+import { useState, useEffect } from 'react'
+import { useSelector } from 'react-redux'
+import { getUser } from '../../store/selectors/userSelectors'
+import api from '../../api'
+import Modal from '../../components/modal'
+
 import puzzlePoint from '../../assets/img/puzzlePoint.png'
+import defaultAvatar from '../../assets/img/defaultAvatar.png'
 
 export default function ServiceBox (props) {
-  const { service, onSelectService } = props
-  const { nome, descricao, price, dataPublic, location, subcategories, user  } = service
-  // const price = 10
+  const { service, onSelectService, servicePoints } = props
+  const { nome, descricao, dataPublic, location, subcategories, user } = service
 
-  const userInfo = () => {
+  const userInfo = (() => {
     if (!user) return <p></p>
-    let { nome, email, celular } = user
+    let { nome, email, celular, avatar } = user
+    let imgSrc = avatar || defaultAvatar
     let fnome = nome?.split(' ')[0] + ' ' + nome?.split(' ')[1].replaceAll(/./g, '*')
     
     let mailsplit = email?.split('@')
@@ -17,21 +23,24 @@ export default function ServiceBox (props) {
 
     let fcelular = celular.slice(0, celular.length - 4) + celular.slice(celular.length - 4).replaceAll(/./g, '*')
 
-    return <div>
-      <p>{fnome}</p>
-      <p>{femail}</p>
-      <p>{fcelular}</p>
+    return <div className="service-box-user-info">
+      <div className="service-box-user-avatar" style={{ backgroundImage: `url(${imgSrc})`}}></div>
+      <div>
+        <p>{fnome}</p>
+        <p>{femail}</p>
+        <p>{fcelular}</p>
+      </div>
     </div>
-  }
+  })()
 
   return <div className="service-box">
     <div className="service-box-info">
       <div className="service-box-header">
         <div>
           <h4 className="service-box-title">{nome}</h4>
-          <p className="service-box-adress">{location?.bairro} - {location?.cidade}</p>
+          <span className="service-box-date">{(new Date(dataPublic)).toLocaleString()}</span>
         </div>
-        <p className="service-box-date">{(new Date(dataPublic)).toLocaleString()}</p>
+        <p className="service-box-adress">{location?.bairro} - {location?.cidade}</p>        
       </div>
       <p>{descricao}</p>
       <div className="service-box-tags">
@@ -43,12 +52,12 @@ export default function ServiceBox (props) {
       </div>
     </div>
     <div className="service-box-user">
-      <div className="service-box-user-info">
-        {userInfo()}
-      </div>
+      {userInfo}
       <button type="button" onClick={() => onSelectService()} className="button service-box-user-button">
         <span>VER INFORMAÇÕES</span>
-        <span className="service-box-price">{price} <img src={puzzlePoint} alt="puzzle points" width="20px"></img></span>
+        { servicePoints &&
+          <span className="service-box-price">{servicePoints} <img src={puzzlePoint} alt="puzzle points" width="20px"></img></span>
+        }
       </button>
     </div>
   </div>

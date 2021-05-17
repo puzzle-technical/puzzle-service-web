@@ -1,88 +1,60 @@
 import './index.css'
 import { useState, useEffect } from 'react'
+import { useHistory } from 'react-router-dom'
 import { useSelector } from 'react-redux'
 import { getUser } from '../../store/selectors/userSelectors'
 import api from '../../api'
-import ProviderNegotiation from '../../components/providerNegotiation'
-import Collapse from '../../components/collapse'
+import ServiceBox from '../../components/serviceBox'
 
-export default function ProviderServices() {
+export default function ProviderServices (props) {
+  const { onSelectService } = props
   const user = useSelector(getUser)
-  const [openedBudgets, setOpenedBudgets] = useState([])
-  const [closedBudgets, setClosedBudgets] = useState([])
-  const [refusedBudgets, setRefusedBudgets] = useState([])
-  
-  const collapseOptionsOpened = openedBudgets.map(budget => {
-    return {
-      opened: <ProviderNegotiation active budget={budget}></ProviderNegotiation>,
-      closed: <ProviderNegotiation budget={budget}></ProviderNegotiation>
-    }
-  })
-  const collapseOptionsRefused = refusedBudgets.map(budget => {
-    return {
-      opened: <ProviderNegotiation active budget={budget}></ProviderNegotiation>,
-      closed: <ProviderNegotiation budget={budget}></ProviderNegotiation>
-    }
-  })
+  const history = useHistory()
 
-  const collapseOptionsClosed = closedBudgets.map(budget => {
-    return {
-      opened: <ProviderNegotiation active budget={budget}></ProviderNegotiation>,
-      closed: <ProviderNegotiation budget={budget}></ProviderNegotiation>
-    }
-  })
+  const [services, setServices] = useState([])
 
   useEffect(() => {
     const load = async () => {
-      await api.get(`budgets/findByUser/${user.idUser}`)
+      await api.get(`users/${user.idUser}/getOpenedServices/`)
       .then(async res => {
-        // console.log(res.data)
-        let budgets = res.data.data
-        let promises = budgets.map(async budget => {
-          return api.get(`services/findById/${budget.idService}`)
+        console.log(res.data)
+        let services = res.data.data
+        for (let service of services) {
+          await api.get(`services/${service.idService}/getSubcategories`)
           .then(async res => {
             // console.log(res.data)
-            if (res.data.success) {
-              budget.service = res.data.data
-              await api.get(`users/findById/${res.data.data.idUser}`)
-              .then(res => {
-                // console.log(res.data)
-                if (res.data.success) budget.provider = res.data.data
-              })
-            }
+            if (res.data.success) service.subcategories = res.data.data
           })
-        })
-        await Promise.all(promises)
-        .then(() => {
-          console.log(budgets);
-          setClosedBudgets(budgets.filter(el => el.status == 'selecionado'))
-          setOpenedBudgets(budgets.filter(el => el.status == 'aberto'))
-          setRefusedBudgets(budgets.filter(el => el.status == 'recusado'))
-        })
-        
+          await api.get(`services/${service.idService}/getLocation`)
+          .then(async res => {
+            // console.log(res.data)
+            if (res.data.success) service.location = res.data.data
+          })
+          await api.get(`users/findById/${service.idUser}`)
+          .then(async res => {
+            // console.log(res.data)
+            if (res.data.success) service.user = res.data.data
+          })
+        }
+        console.log(services)
+        setServices(services)
       })
     }
     load()
     .catch(err => console.log(err))
   }, [])
 
+  const openService = (service) => {
+    onSelectService(service)
+    history.push('/user/service')
+  }
+
   return <div className="user-services-page">
-
-    { openedBudgets.length > 0 && <div className="user-services">
-        <h2>Orçamentos enviados</h2>
-        {
-          <Collapse options={collapseOptionsOpened}></Collapse>
-        }
-      </div>
-    }<br/>
-
-    { closedBudgets.length > 0 && <div className="user-services">
-        <h2>Negociações</h2>
-        {
-          <Collapse options={collapseOptionsClosed}></Collapse>
-        }
-      </div>
-    }<br/>
-    
+    {services.length ? 
+      services.map((el, id) => {
+        return <ServiceBox key={id} service={el} onSelectService={() => openService(el)}></ServiceBox>
+      }) :
+      <p>Nenhum serviço encontrado.</p>
+    }
   </div>
 }
