@@ -1,4 +1,5 @@
 import { Switch, Route, useRouteMatch } from "react-router-dom";
+import Navbar from '../components/navbar'
 
 export default function MainRouter () {
   const { path } = useRouteMatch()
@@ -8,7 +9,7 @@ export default function MainRouter () {
   const servicesPath = `${path}/services`
 
   return <div>
-    {/* <Navbar menuOptions={menuOptions}/> */}
+    <Navbar options={['Serviços', 'Entrar', 'Baby Shark']}/>
     
     <div>
       <Switch>

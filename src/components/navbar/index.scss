@@ -1,0 +1,36 @@
+@import "../../../node_modules/bulma/bulma.sass";
+
+.navbar-wrapper {
+  height: 85px;
+}
+
+.navbar {
+  box-shadow: 0px 2px 4px rgba($color: $grey-lighter, $alpha: 0.7) ;
+
+  .navbar-brand {
+    min-height: 5rem;
+
+    .navbar-item img {
+      max-height: 3rem;
+    }
+
+    .navbar-burger {
+      background: transparent;
+      height: auto;
+    }
+  }
+
+  .navbar-menu {
+    position: absolute;
+    width: 100%;
+  }
+}
+
+@media screen and (min-width: 1024px) {
+  .navbar {
+    .navbar-menu {
+      position: initial;
+      width: auto;
+    }
+  }
+}
