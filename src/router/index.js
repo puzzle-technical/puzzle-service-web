@@ -1,72 +1,71 @@
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { getToken } from '../store/selectors/sessionSelectors'
-import { getUser } from '../store/selectors/userSelectors'
+import { getUser, userHasData } from '../store/selectors/userSelectors'
 import { Redirect, BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import { verifyUserAuth } from "../services/auth";
 
-import SignUp from '../pages/signUp'
-import Login from "../pages/login";
-import LoadingPage from '../components/loading/loadingPage'
-
+// ROUTES
 import MainRouter from './main';
 import UserRouter from './user';
 import ProviderRouter from './provider';
 import AdminRouter from './admin';
 
 export default function RouterView() {
-  const [loading, setLoading] = useState(true)
-  const token = useSelector(getToken)
+  const userhasdata = useSelector(userHasData)
   const user = useSelector(getUser)
+  const token = useSelector(getToken)
   const [isTokenValid, setIsTokenValid] = useState()
-
-  const userHasData = () => user && user != {}
+  
+  // PATHS
+  const mainPath = '/'
+  const loginPath = '/login'
+  const singUpPath = '/signUp'
+  const signUpParamPath = '/signUp/:type'
+  const userPath = '/user'
+  const adminPath = '/admin'
   
   useEffect(() => {
     const verify = async () => {
       let verify = false
-      if (user && user != {})
-        verify = await verifyUserAuth(token)
+      if (userhasdata) verify = await verifyUserAuth(token)
       setIsTokenValid(verify)
-      setLoading(false)
     }
     verify()
-  }, [token, user])
+  }, [token, userhasdata])
 
-  const routerComponent = <Router>
+  return <Router>
     <Switch>
-      <Route exact path="/login">
-        { loading ? <LoadingPage/> :
-            isTokenValid && userHasData() ?
-              <Redirect to="/user"/> :
-              <Login/>
+      <Route exact path={loginPath}>
+        { 
+          isTokenValid && userhasdata
+            ? <Redirect to={userPath}/>
+            : <div>Login</div>
         }
       </Route>
 
-      <Route exact path={["/signUp/:type", "/signUp"]}>
-        <SignUp/>
+      <Route exact path={[singUpPath, signUpParamPath]}>
+        <div>Sign up</div>
       </Route>
       
-      <Route path="/user">
-        { loading ? <LoadingPage/> :
-          !userHasData() || !isTokenValid ?
-            <Redirect to="/login"/> :
-            user.tipoUser == 'provider' ?
-              <ProviderRouter user={user}/> :
-              <UserRouter/>
+      <Route path={userPath}>
+        { 
+          !userhasdata || !isTokenValid
+            ? <Redirect to={loginPath}/>
+            : user.tipoUser == 'provider'
+              ? <ProviderRouter/>
+              : <UserRouter/>
         }
       </Route>
 
-      <Route exact path="/admin">
+      <Route exact path={adminPath}>
         <AdminRouter/>
       </Route>
 
-      <Route path="/">
+      <Route path={mainPath}>
         <MainRouter/>
       </Route>
 
     </Switch>
   </Router>
-
-  return routerComponent
 }

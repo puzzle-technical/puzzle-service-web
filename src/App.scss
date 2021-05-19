@@ -1,0 +1,39 @@
+@charset "utf-8";
+
+$blue: #0F4B8A;
+$light-blue: #24B3B4;
+
+@font-face {
+  font-family: 'Montserrat';
+  font-weight: normal;
+  src: url("./assets/fonts/Montserrat-Regular.otf") format("otf");
+}
+
+@font-face {
+  font-family: 'Montserrat';
+  font-weight: bold;
+  src: url("./assets/fonts/Montserrat-Bold.otf") format("otf");
+}
+
+// Update Bulma's global variables
+$family-sans-serif: "Montserrat", sans-serif;
+$primary: $blue;
+$link: $blue;
+$widescreen-enabled: false;
+$fullhd-enabled: false;
+
+// Update some of Bulma's component variables
+$control-border-width: 2px;
+$input-border-color: transparent;
+$input-shadow: none;
+
+// Import only what you need from Bulma
+@import "../node_modules/bulma/sass/utilities/_all.sass";
+@import "../node_modules/bulma/sass/base/_all.sass";
+@import "../node_modules/bulma/sass/elements/button.sass";
+@import "../node_modules/bulma/sass/elements/container.sass";
+@import "../node_modules/bulma/sass/elements/title.sass";
+@import "../node_modules/bulma/sass/form/_all.sass";
+@import "../node_modules/bulma/sass/components/navbar.sass";
+@import "../node_modules/bulma/sass/layout/hero.sass";
+@import "../node_modules/bulma/sass/layout/section.sass";

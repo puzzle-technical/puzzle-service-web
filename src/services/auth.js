@@ -1,15 +1,13 @@
 import api from '../api'
+import { wrapLogRequest } from '../utils'
 
 export async function login (email, senha) {
   let result = undefined
-  const setResult = x => { result = x }
+  const setResult = res => { result = res }
 
-  await api.post('/users/login', { email, senha })
-  .then(res => {
-    console.log(res)
-    setResult(res.data)
-  })
-  .catch(err => { console.log(err) })
+  wrapLogRequest(api.post('/users/login', { email, senha }),
+  (res) => setResult(res.data))
+
   return result
 }
 
