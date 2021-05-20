@@ -1,30 +1,42 @@
-import { Switch, Route, useRouteMatch } from "react-router-dom";
+import { Switch, Route, Link, useLocation } from "react-router-dom";
+import { mainBasePath, servicesPath, loginBasePath, singupBasePath } from './paths'
+
+import Home from '../pages/home'
+import Services from '../pages/services'
+
 import Navbar from '../components/navbar'
+import Footer from '../components/footer'
 
 export default function MainRouter () {
-  const { path } = useRouteMatch()
+  const { pathname } = useLocation();
+  
+  const menuOptions = [
+    // <Link to={servicesPath}>
+    //   <div className={`menu-tab ${pathname == servicesPath ? 'is-active' : ''}`}>Serviços</div>
+    // </Link>,
+    <Link to={loginBasePath}>Entrar</Link>,
+    <Link to={singupBasePath}>
+      <button className="button is-info">Seja um profissional</button>
+    </Link>
+  ]
 
-  // PATHS
-  const mainPath = path
-  const servicesPath = `${path}/services`
-
-  return <div>
-    <Navbar options={['Serviços', 'Entrar', 'Baby Shark']}/>
+  return <div className="navbar-page">
+    <Navbar options={menuOptions}/>
     
-    <div>
+    <div className="navbar-page-content">
       <Switch>
         
         <Route exact path={servicesPath}>
-          <div>Services</div>
+          <Services/>
         </Route>
 
-        <Route path={mainPath}>
-          <div>Home</div>
+        <Route path={mainBasePath}>
+          <Home/>
         </Route>
 
       </Switch>
     </div>
 
-    {/* <Footer/> */}
+    <Footer/>
   </div>
 }

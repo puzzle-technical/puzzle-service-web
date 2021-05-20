@@ -1,10 +1,12 @@
-@import "../../../node_modules/bulma/bulma.sass";
+@import "../../variables.scss";
 
 .navbar-wrapper {
   height: 85px;
 }
 
 .navbar {
+  box-sizing: border-box;
+  width: 100vw;
   box-shadow: 0px 2px 4px rgba($color: $grey-lighter, $alpha: 0.7) ;
 
   .navbar-brand {
@@ -26,11 +28,29 @@
   }
 }
 
-@media screen and (min-width: 1024px) {
+@media screen and (min-width: $desktop) {
   .navbar {
     .navbar-menu {
       position: initial;
       width: auto;
+    }
+  }
+}
+
+
+.menu-tab {
+  &.is-active {
+    @media screen and (min-width: $desktop) {
+      &::after {
+        content: '';
+        width: 40%;
+        height: 4px;
+        position: absolute;
+        left: 30%;
+        bottom: 15px;
+        border-radius: 10px;
+        background: $light-blue;
+      }
     }
   }
 }

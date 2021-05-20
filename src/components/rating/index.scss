@@ -1,0 +1,22 @@
+.rating {
+  display: inline-block;
+  width: fit-content;
+}
+
+.star {
+  display: block;
+  position: relative;
+  left: 0;
+  top: 0;
+}
+
+.star-backlayer, .star-frontlayer, .star-mask {
+  position: absolute;
+  height: 100%;
+  left: 0;
+  top: 0;
+}
+
+.star-mask {
+  overflow: hidden;
+}

@@ -1,7 +1,5 @@
 @charset "utf-8";
-
-$blue: #0F4B8A;
-$light-blue: #24B3B4;
+@import "./variables.scss";
 
 @font-face {
   font-family: 'Montserrat';
@@ -18,6 +16,7 @@ $light-blue: #24B3B4;
 // Update Bulma's global variables
 $family-sans-serif: "Montserrat", sans-serif;
 $primary: $blue;
+$info: $light-blue;
 $link: $blue;
 $widescreen-enabled: false;
 $fullhd-enabled: false;
@@ -27,16 +26,7 @@ $control-border-width: 2px;
 $input-border-color: transparent;
 $input-shadow: none;
 
-// Import only what you need from Bulma
-@import "../node_modules/bulma/sass/utilities/_all.sass";
-@import "../node_modules/bulma/sass/base/_all.sass";
-@import "../node_modules/bulma/sass/elements/button.sass";
-@import "../node_modules/bulma/sass/elements/container.sass";
-@import "../node_modules/bulma/sass/elements/title.sass";
-@import "../node_modules/bulma/sass/form/_all.sass";
-@import "../node_modules/bulma/sass/components/navbar.sass";
-@import "../node_modules/bulma/sass/layout/hero.sass";
-@import "../node_modules/bulma/sass/layout/section.sass";
+@import "../node_modules/bulma/bulma.sass";
 
 * {
   margin: 0;
@@ -44,5 +34,23 @@ $input-shadow: none;
   border: 0;
   list-style: none;
   text-decoration: none;
-  box-sizing: border-box;
+  box-sizing: border-box !important;
+}
+
+html, body {
+  width: 100vw;
+}
+
+.navbar-page {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+
+  &-content {
+    flex-grow: 1;
+  }
+}
+
+.has-shadow {
+  box-shadow: $box-shadow;
 }
