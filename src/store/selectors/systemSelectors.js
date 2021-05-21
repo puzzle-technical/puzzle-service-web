@@ -1,0 +1,1 @@
+export const alertInfo = state => state.systemState.alert

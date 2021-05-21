@@ -5,8 +5,11 @@
 }
 
 .navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
   box-sizing: border-box;
-  width: 100vw;
+  width: 100%;
   box-shadow: 0px 2px 4px rgba($color: $grey-lighter, $alpha: 0.7) ;
 
   .navbar-brand {
@@ -39,18 +42,39 @@
 
 
 .menu-tab {
+  position: relative;
+  &.is-active {
+    &::after {
+      position: absolute;
+      left: calc(50% - 75px);
+      top: 5px;
+      content: '';
+      border-width: 7px;
+      border-style: solid;
+      border-color: transparent transparent transparent $primary;
+    }
+  }
   &.is-active {
     @media screen and (min-width: $desktop) {
       &::after {
-        content: '';
+        border: 0;
         width: 40%;
         height: 4px;
-        position: absolute;
         left: 30%;
-        bottom: 15px;
+        top: 120%;
         border-radius: 10px;
         background: $light-blue;
       }
     }
   }
+}
+
+.navbar-dropdown {
+  .menu-tab {
+    @media screen and (min-width: $desktop) {
+      &::after {
+        content: none;
+      }
+    }
+  }  
 }

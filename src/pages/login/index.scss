@@ -1,0 +1,23 @@
+@import "../../variables.scss";
+
+.form {
+  padding: 30px;
+}
+
+@media screen and (min-width: $desktop) {
+  .login-page {
+    background: url("../../assets/img/login-bg.png");
+    background-size: cover;
+    height: 100vh;
+    display: flex;
+    justify-content: flex-end;
+  }
+  .login-panel {
+    padding: 60px;
+    background: $white;
+  }
+  .form {
+    border: 1px solid $grey-light;
+    border-radius: 5px;
+  }
+}

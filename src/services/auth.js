@@ -5,7 +5,7 @@ export async function login (email, senha) {
   let result = undefined
   const setResult = res => { result = res }
 
-  wrapLogRequest(api.post('/users/login', { email, senha }),
+  await wrapLogRequest(api.post('/users/login', { email, senha }),
   (res) => setResult(res.data))
 
   return result

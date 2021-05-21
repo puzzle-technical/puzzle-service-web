@@ -1,0 +1,10 @@
+@import "../../variables.scss";
+
+.dropdown-link {
+}
+
+@media screen and (min-width: $desktop){
+  .dropdown-link {
+    &::after {}
+  }
+}

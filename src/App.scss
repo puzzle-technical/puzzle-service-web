@@ -1,5 +1,4 @@
 @charset "utf-8";
-@import "./variables.scss";
 
 @font-face {
   font-family: 'Montserrat';
@@ -13,19 +12,8 @@
   src: url("./assets/fonts/Montserrat-Bold.otf") format("otf");
 }
 
-// Update Bulma's global variables
-$family-sans-serif: "Montserrat", sans-serif;
-$primary: $blue;
-$info: $light-blue;
-$link: $blue;
-$widescreen-enabled: false;
-$fullhd-enabled: false;
 
-// Update some of Bulma's component variables
-$control-border-width: 2px;
-$input-border-color: transparent;
-$input-shadow: none;
-
+@import "./variables.scss";
 @import "../node_modules/bulma/bulma.sass";
 
 * {
@@ -45,7 +33,7 @@ html, body {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
-
+  
   &-content {
     flex-grow: 1;
   }
@@ -53,4 +41,19 @@ html, body {
 
 .has-shadow {
   box-shadow: $box-shadow;
+}
+
+.box {
+  border: 1px solid $grey-light;
+  border-radius: 5px;
+  box-shadow: none;
+  &:not(:last-child) {
+    margin-bottom: .7rem;
+  }
+}
+
+.loader {
+  width: 100px;
+  height: 100px;
+  margin-top: 10rem;
 }

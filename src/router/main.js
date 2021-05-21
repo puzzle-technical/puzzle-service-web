@@ -10,18 +10,24 @@ import Footer from '../components/footer'
 export default function MainRouter () {
   const { pathname } = useLocation();
   
-  const menuOptions = [
-    // <Link to={servicesPath}>
-    //   <div className={`menu-tab ${pathname == servicesPath ? 'is-active' : ''}`}>Serviços</div>
-    // </Link>,
-    <Link to={loginBasePath}>Entrar</Link>,
-    <Link to={singupBasePath}>
-      <button className="button is-info">Seja um profissional</button>
-    </Link>
-  ]
+  const navbar = <Navbar>
+    <div className="navbar-item">
+      <Link to={servicesPath}>
+        <div className={`menu-tab ${pathname == servicesPath ? 'is-active' : ''}`}>Serviços</div>
+      </Link>
+    </div>
+    <div className="navbar-item">
+      <Link to={loginBasePath}>Entrar</Link>
+    </div>
+    <div className="navbar-item">
+      <Link to={singupBasePath}>
+        <button className="button is-info">Seja um profissional</button>
+      </Link>
+    </div>
+  </Navbar>
 
   return <div className="navbar-page">
-    <Navbar options={menuOptions}/>
+    {navbar}
     
     <div className="navbar-page-content">
       <Switch>

@@ -11,19 +11,17 @@ import UserRouter from './user';
 import ProviderRouter from './provider';
 import AdminRouter from './admin';
 
+// COMPONENTS
+import Login from '../pages/login'
+
+//PATHS
+import { adminBasePath, loginBasePath, mainBasePath, singupBasePath, singupParamPath, userBasePath } from "./paths";
+
 export default function RouterView() {
   const userhasdata = useSelector(userHasData)
   const user = useSelector(getUser)
   const token = useSelector(getToken)
   const [isTokenValid, setIsTokenValid] = useState()
-  
-  // PATHS
-  const mainPath = '/'
-  const loginPath = '/login'
-  const singUpPath = '/signUp'
-  const signUpParamPath = '/signUp/:type'
-  const userPath = '/user'
-  const adminPath = '/admin'
   
   useEffect(() => {
     const verify = async () => {
@@ -36,33 +34,33 @@ export default function RouterView() {
 
   return <Router>
     <Switch>
-      <Route exact path={loginPath}>
+      <Route exact path={loginBasePath}>
         { 
           isTokenValid && userhasdata
-            ? <Redirect to={userPath}/>
-            : <div>Login</div>
+            ? <Redirect to={userBasePath}/>
+            : <Login/>
         }
       </Route>
 
-      <Route exact path={[singUpPath, signUpParamPath]}>
+      <Route exact path={[singupBasePath, singupParamPath]}>
         <div>Sign up</div>
       </Route>
       
-      <Route path={userPath}>
+      <Route path={userBasePath}>
         { 
           !userhasdata || !isTokenValid
-            ? <Redirect to={loginPath}/>
+            ? <Redirect to={loginBasePath}/>
             : user.tipoUser == 'provider'
               ? <ProviderRouter/>
               : <UserRouter/>
         }
       </Route>
 
-      <Route exact path={adminPath}>
+      <Route exact path={adminBasePath}>
         <AdminRouter/>
       </Route>
 
-      <Route path={mainPath}>
+      <Route path={mainBasePath}>
         <MainRouter/>
       </Route>
 

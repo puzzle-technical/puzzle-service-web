@@ -1,5 +1,3 @@
-import { defineState } from 'redux-localstore'
-
 import {
   UPDATE_USER,
   UPDATE_CURRENT_SERVICE
@@ -9,9 +7,8 @@ const defaultState = {
   user: undefined,
   currentService: undefined
 }
-const initialState = defineState(defaultState)('userState')
 
-export default function userReducer (state = initialState, action) {
+export default function userReducer (state = defaultState, action) {
   switch (action.type) {
     case UPDATE_USER:
       return {

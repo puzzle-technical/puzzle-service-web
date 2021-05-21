@@ -1,5 +1,8 @@
 @import "../../variables.scss";
 
+.hero-body {
+  width: 100%;
+}
 @media screen and (min-width: $desktop) {
   .hero-body {
     height: 70vh;

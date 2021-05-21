@@ -1,6 +1,15 @@
-@import "../node_modules/bulma/sass/utilities/initial-variables.sass";
-
 $blue: #0F4B8A;
 $light-blue: #24B3B4;
+
+// Update Bulma's global variables
+$family-sans-serif: "Montserrat", sans-serif;
+$primary: $blue;
+$info: $light-blue;
+$link: $blue;
+$widescreen-enabled: false;
+$fullhd-enabled: false;
+
+@import "../node_modules/bulma/sass/utilities/initial-variables.sass";
+@import "../node_modules/bulma/sass/utilities/derived-variables.sass";
 
 $box-shadow: 1px 3px 4px rgba($grey, .6);
