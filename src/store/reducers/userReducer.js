@@ -1,12 +1,10 @@
 import { UPDATE_USER } from '../actions/actionTypes'
-import { defineState } from 'redux-localstore'
 
 const defaultState = {
   user: undefined
 }
-const initialState = defineState(defaultState)('userState')
 
-export default function userReducer (state = initialState, action) {
+export default function userReducer (state = defaultState, action) {
   switch (action.type) {
     case UPDATE_USER:
       return {

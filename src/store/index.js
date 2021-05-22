@@ -1,10 +1,13 @@
-import { createStore } from 'redux'
+import { createStore, compose } from 'redux'
 import { Reducers } from './reducers'
-import storeSynchronize from 'redux-localstore'
+import persistState from 'redux-localstorage'
 
-export const store = createStore(
-  Reducers, 
-  window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
+const enhancer = compose(
+  // window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__(),
+  persistState()
 )
 
-storeSynchronize(store)
+export const store = createStore(
+  Reducers,
+  enhancer
+)
