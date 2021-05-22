@@ -1,13 +1,16 @@
 $blue: #0F4B8A;
 $light-blue: #24B3B4;
+$red: #ee322b;
 
 // Update Bulma's global variables
 $family-sans-serif: "Montserrat", sans-serif;
 $primary: $blue;
 $info: $light-blue;
+$danger: $red;
 $link: $blue;
 $widescreen-enabled: false;
 $fullhd-enabled: false;
+$section-padding: 1.5rem 1.5rem;
 
 @import "../node_modules/bulma/sass/utilities/initial-variables.sass";
 @import "../node_modules/bulma/sass/utilities/derived-variables.sass";

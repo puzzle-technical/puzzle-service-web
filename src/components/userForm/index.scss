@@ -1,0 +1,21 @@
+@import "../../variables.scss";
+
+.upload-image {
+  min-height: 100px;
+  height: 100%;
+  border: 1px solid $grey-lighter;
+  border-radius: 5px;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  padding: 0 20px;
+}
+
+.upload-image-preview {
+  background:  $grey-lighter;
+  background-size: cover;
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  overflow: hidden;
+}

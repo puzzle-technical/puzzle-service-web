@@ -14,10 +14,9 @@ const defaultState = {
 export default function systemReducer (state = defaultState, action) {
   switch (action.type) {
     case UPDATE_ALERT:
-      let updateAlert = {}
-      for (const key of Object.keys(defaultState.alert)) {
-        if (Object.keys(action.alert).includes(key)) updateAlert[key] = action.alert[key]
-        else updateAlert[key] = defaultState.alert[key]
+      let updateAlert = {...defaultState.alert}
+      for (const key of Object.keys(action.alert)) {
+        if (Object.keys(updateAlert).includes(key)) updateAlert[key] = action.alert[key]
       }
       return {
         ...state,

@@ -1,5 +1,5 @@
 import './index.scss'
-import { cloneElement, Children, useState } from 'react'
+import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import Logo from '../../assets/img/logo.png'
 
@@ -22,10 +22,8 @@ export default function Navbar(props) {
       </div>
 
       <div className={`navbar-menu ${menuActive ? 'is-active' : ''}`}>
-        <div className="navbar-end has-text-centered-mobile">
-          {Children.map(children, (child, index) => {
-            return cloneElement(child, { onClick: () => { setMenuActive(false) } })
-          })}
+        <div className="navbar-end has-text-centered-mobile" onClick={() => setMenuActive(false)}>
+          {children}
         </div>
       </div>
     </nav>

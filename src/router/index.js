@@ -13,6 +13,7 @@ import AdminRouter from './admin';
 
 // COMPONENTS
 import Login from '../pages/login'
+import Signup from '../pages/signup'
 
 //PATHS
 import { adminBasePath, loginBasePath, mainBasePath, singupBasePath, singupParamPath, userBasePath } from "./paths";
@@ -43,7 +44,7 @@ export default function RouterView() {
       </Route>
 
       <Route exact path={[singupBasePath, singupParamPath]}>
-        <div>Sign up</div>
+        <Signup/>
       </Route>
       
       <Route path={userBasePath}>

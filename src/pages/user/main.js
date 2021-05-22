@@ -27,11 +27,15 @@ export default function UserMain() {
 
   
   const negotiationsRender = closedServices
-  ? closedServices.map((service, index) => {
-      return <div className="box" key={index}>
-        {service}
+  ? closedServices.length
+    ? closedServices.map((service, index) => {
+        return <div className="box" key={index}>
+          {service}
+        </div>
+      })
+    : <div className="block">
+        <p>Você não está nenhuma negociação.</p>
       </div>
-    })
   : <p>Ouve um erro ao carregar os serviços. Por favor, tente novamente mais tarde ou contate o suporte.</p>
 
   const servicesRender = openedServices
@@ -54,7 +58,7 @@ export default function UserMain() {
 
     {/* drafts */}
     {(!draftServices || draftServices.length > 0) &&
-      <div className="section pb-1">
+      <div className="section">
         <h2 className="subtitle is-4 mb-2">Rascunhos</h2>
         { draftsRender }
       </div>
@@ -62,7 +66,7 @@ export default function UserMain() {
     
 
     {/* services */}
-    { <div className="section pb-1">
+    { <div className="section">
         <h2 className="subtitle is-4 mb-2">Meus serviços</h2>
         { servicesRender }
       </div>
@@ -70,8 +74,7 @@ export default function UserMain() {
 
     
     {/* negotiations */}
-    {(!closedServices || closedServices.length > 0) &&
-      <div className="section pb-1">
+    { <div className="section mb-3">
         <h2 className="subtitle is-4 mb-2">Negociações</h2>
         { negotiationsRender }
       </div>

@@ -1,5 +1,5 @@
 import api from '../api'
-import { wrapLogRequest } from '../utils'
+import { wrapLogRequest } from '../utils/requests'
 
 export async function login (email, senha) {
   let result = undefined

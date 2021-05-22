@@ -24,6 +24,9 @@
   text-decoration: none;
   box-sizing: border-box !important;
 }
+.textarea {
+  resize: none;
+}
 
 html, body {
   width: 100vw;
@@ -43,6 +46,10 @@ html, body {
   box-shadow: $box-shadow;
 }
 
+.has-border {
+  border: 1px solid $grey-light !important;
+}
+
 .box {
   border: 1px solid $grey-light;
   border-radius: 5px;
@@ -56,4 +63,15 @@ html, body {
   width: 100px;
   height: 100px;
   margin-top: 10rem;
+}
+
+.puzzle-label {
+  font-size: .85rem;
+  background: $white;
+  padding: 0 .5rem;
+  border-radius: 5px;
+  position: absolute;
+  top: -13px;
+  left: 15px;
+  z-index: 10;
 }

@@ -7,6 +7,7 @@
     background: rgba($grey, .4);
   }
   .modal-content {
+    width: fit-content;
     max-width: 90%;
   }
 
@@ -16,5 +17,6 @@
   }
   .message-body {
     background: $white;
+    word-wrap: break-word;
   }
 }

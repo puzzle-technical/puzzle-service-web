@@ -1,10 +1,11 @@
 @import "../../variables.scss";
 
-.dropdown-link {
+.navbar-item.has-dropdown {
+  background: $light;
 }
 
 @media screen and (min-width: $desktop){
-  .dropdown-link {
-    &::after {}
+  .navbar-item.has-dropdown {
+    background: transparent;
   }
 }
