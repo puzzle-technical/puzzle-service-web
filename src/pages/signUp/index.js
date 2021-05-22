@@ -77,14 +77,19 @@ export default function UserSignUp () {
         console.log(categoriesGroups);
         setAvailableSubcategories(categoriesGroups)
       })
-      let ufs = await getUFs()
-      setAvailableUFs(ufs)
     }
     load()
     .catch(err => {
       console.log(err)
       setLoading(false)
     })
+  }, [])
+
+  useEffect(() => {
+    (async () => {
+      let ufs = await getUFs()
+      setAvailableUFs(ufs)
+    })()
   }, [])
 
   useEffect(() => {
