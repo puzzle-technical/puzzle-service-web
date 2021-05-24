@@ -57,7 +57,7 @@ export default function RouterView() {
         }
       </Route>
 
-      <Route exact path="/admin">
+      <Route path="/admin-puzzle">
         <AdminRouter/>
       </Route>
 
