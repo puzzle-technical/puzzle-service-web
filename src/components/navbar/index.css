@@ -15,3 +15,7 @@
   align-items: center;
   font-size: 14px;
 }
+
+.admin-navbar {
+  position: fixed;
+}

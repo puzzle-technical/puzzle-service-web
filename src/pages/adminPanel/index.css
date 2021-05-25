@@ -1,0 +1,7 @@
+.admin-page {
+  padding: 30px;
+  color: var(--dark);
+}
+.admin-page-title:not(:first-child) {
+  margin-top: 50px;
+} 

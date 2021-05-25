@@ -1,45 +1,97 @@
-import { useState, useEffect } from 'react'
-import { Route, Switch, useRouteMatch, Link, useHistory, useLocation, Redirect } from "react-router-dom";
-import { useSelector, useDispatch } from 'react-redux'
-import { getAdminToken } from '../store/selectors/sessionSelectors'
-import { getAdminUser } from '../store/selectors/userSelectors'
+import { useState, useEffect } from "react";
+import {
+  Route,
+  Switch,
+  useRouteMatch,
+  Link,
+  useHistory,
+  useLocation,
+  Redirect,
+} from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
+import { getAdminToken } from "../store/selectors/sessionSelectors";
+import { getAdminUser } from "../store/selectors/userSelectors";
 import { verifyAdminUserAuth } from "../services/auth";
 
-import LoginAdmin from '../pages/loginAdmin'
+import Navbar from "../components/navbar";
 
-export default function UserRouter () {
-  const { path } = useRouteMatch()
-  const adminToken = useSelector(getAdminToken)
-  const adminUser = useSelector(getAdminUser)
-  const [isTokenValid, setIsTokenValid] = useState()
+import AdminUsersPanel from "../pages/adminPanel/users";
+import AdminCategoriesPanel from "../pages/adminPanel/categories";
+import LoginAdmin from "../pages/loginAdmin";
 
-  const userHasData = () => adminUser && adminUser != {}
+export default function UserRouter() {
+  const location = useLocation();
+  const { path } = useRouteMatch();
+  const adminToken = useSelector(getAdminToken);
+  const adminUser = useSelector(getAdminUser);
+  const [isTokenValid, setIsTokenValid] = useState();
+
+  const userHasData = () => {
+    return adminUser && adminUser != {};
+  };
 
   useEffect(() => {
-    console.log(`${path}/login`);
     const verify = async () => {
-      let verify = false
-      if (userHasData())
-        verify = await verifyAdminUserAuth(adminToken)
-      setIsTokenValid(verify)
-    }
-    verify()
-  }, [adminToken])
+      let verify = false;
+      if (userHasData()) verify = await verifyAdminUserAuth(adminToken);
+      console.log(verify);
+      setIsTokenValid(verify);
+    };
+    verify();
+  }, [adminToken]);
 
-  return <Switch>
+  const mainPath = `${path}/`;
+  const loginPath = `${path}/login`;
+  const categoriesPath = `${path}/categories`;
 
-    <Route exact path={path}>
-      { !userHasData() || !isTokenValid ?
+  const menuOptions = [
+    <Link
+      to={mainPath}
+      className={`button-simple ${
+        location.pathname == mainPath ? "active" : ""
+      }`}
+    >
+      USUÁRIOS
+    </Link>,
+    <Link
+      to={categoriesPath}
+      className={`button-simple ${
+        location.pathname == categoriesPath ? "active" : ""
+      }`}
+    >
+      CATEGORIAS
+    </Link>,
+  ];
+
+  return (
+    <div>
+      {location.pathname != loginPath && (
+        <Navbar menuOptions={menuOptions}></Navbar>
+      )}
+      <Switch>
+        <Route exact path={mainPath}>
+          {!userHasData() || !isTokenValid ? (
+            <Redirect to={`${path}/login`} />
+          ) : (
+            <AdminUsersPanel></AdminUsersPanel>
+          )}
+        </Route>
+
+        <Route exact path={categoriesPath}>
+          { !userHasData() || !isTokenValid ?
           <Redirect to={`${path}/login`}/> :
-          <h1>Admin</h1>
-      }
-    </Route>
+          <AdminCategoriesPanel></AdminCategoriesPanel>
+          }
+        </Route>
 
-    <Route exact path={`${path}/login`}>
-      { isTokenValid && userHasData() ?
-        <Redirect to={path}/> :
-        <LoginAdmin/>
-      }
-    </Route>
-  </Switch>
+        <Route exact path={`${loginPath}`}>
+          {isTokenValid && userHasData() ? (
+            <Redirect to={path} />
+          ) : (
+            <LoginAdmin />
+          )}
+        </Route>
+      </Switch>
+    </div>
+  );
 }

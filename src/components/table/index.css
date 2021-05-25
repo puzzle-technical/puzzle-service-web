@@ -1,0 +1,19 @@
+
+.table-wrapper {
+  max-width: 98%;
+  cursor: grab;
+  overflow: auto;
+}
+
+.table-wrapper, table, th, td {
+  border: 1px solid var(--medium);
+  border-collapse: collapse;
+}
+th, td {
+  padding: 10px;
+  white-space: nowrap;
+  width: fit-content;
+}
+th {
+  background: rgb(177, 230, 247);
+}
