@@ -9,6 +9,8 @@ import Dropdown from '../dropDown'
 import Modal from '../modal'
 import { ReactComponent as EllipsisIcon } from '../../assets/icons/ellipsis-vertical.svg';
 
+const useMailto = true
+
 export default function ProviderNegotiation (props) {
   const { budget, active } = props
   const { service, provider, descricao, dataPublic, location } = budget
@@ -51,7 +53,7 @@ export default function ProviderNegotiation (props) {
           </div>
         </div><br/>
         <button className="proposal-provider-button button" onClick={() => {
-          window.location.href = `https://mail.google.com/mail/u/0/?fs=1&tf=cm&to=${provider?.email}&subject=Proposta de orçamento [Puzzle Service]`
+          window.location.href = useMailto ? `mailto:${provider?.email}` : `https://mail.google.com/mail/u/0/?fs=1&tf=cm&to=${provider?.email}&subject=Proposta de orçamento [Puzzle Service]`
         }}>
           ENVIAR EMAIL PARA {provider?.nome.split(' ')[0].toUpperCase()}
         </button>

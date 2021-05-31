@@ -42,6 +42,13 @@ button:hover, a:hover {
   cursor: pointer !important;
 }
 
+.input-simple {
+  border: 1px solid var(--medium);
+  width: 100%;
+  padding: 5px;
+  border-radius: 5px;
+}
+
 .button-simple {
   position: relative;
   color: var(--secondary);

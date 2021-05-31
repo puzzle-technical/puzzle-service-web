@@ -21,6 +21,9 @@ export default function Collapse(props) {
                 </button>
               </div>
             }
+            { option.background && current != index &&
+              <div className="collapse-option-bg" style={{ backgroundImage: `url(${option.background})` }}></div>
+            }
           </div>
         })
       }

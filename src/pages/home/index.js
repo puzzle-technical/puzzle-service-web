@@ -2,9 +2,6 @@ import './index.css';
 
 import Banner from '../../components/banner'
 
-import service1 from '../../assets/img/service1.png'
-import service2 from '../../assets/img/service2.png'
-import service3 from '../../assets/img/service3.png'
 import { ReactComponent as Star } from '../../assets/icons/star.svg'
 
 function Home() {
@@ -40,15 +37,15 @@ function Home() {
       <h2>SERVIÇOS MAIS SOLICITADOS</h2>
       <div className="services">
         <div className="service">
-          <img className="service-image" src={service3} alt=""></img>
+          <img className="service-image" src={'http://localhost:5000/img/services/service3.png'} alt=""></img>
           <p className="service-label">Construção de casas</p>
         </div>
         <div className="service">
-          <img className="service-image" src={service1} alt=""></img>
+          <img className="service-image" src={'http://localhost:5000/img/services/service1.png'} alt=""></img>
           <p className="service-label">Instalações elétricas</p>
         </div>
         <div className="service">
-          <img className="service-image" src={service2} alt=""></img>
+          <img className="service-image" src={'http://localhost:5000/img/services/service2.png'} alt=""></img>
           <p className="service-label">Instalações hidráulicas</p>
         </div>
       </div>

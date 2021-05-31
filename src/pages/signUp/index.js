@@ -112,13 +112,13 @@ export default function UserSignUp () {
       </p>, 'Nome inválido')
 
     // senha
-    if (!senha.match(/^(?=.*[0-9])(?=.*[a-zA-Z])([a-zA-Z0-9]{5,15})$/)) 
+    if (!senha.match(/^(?=.*[0-9])(?=.*[a-zA-Z])([^\s]{5,15})$/)) 
       return displayAlert(<p>
         As senhas precisam satisfazer as seguintes condições:
         <br/>
         <br/>- Deve ter entre 5 e 15 caracteres
         <br/>- Deve ter no mínimo um número e uma letra
-        <br/>- Não pode conter caracteres especiais, acentos e nem espaços.
+        <br/>- Não pode conter espaços.
       </p>, 'Senha inválida')
 
     if (senha != senhaConfirm)

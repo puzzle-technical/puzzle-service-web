@@ -1,0 +1,10 @@
+.title  {
+  margin: 5px 0;
+}
+
+.list {
+  margin-top: 10px;
+}
+.list li {
+  list-style: initial;
+}

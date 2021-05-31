@@ -1,18 +1,26 @@
 
 .table-wrapper {
-  max-width: 98%;
-  cursor: grab;
   overflow: auto;
 }
+.table-button {
+  padding: 5px;
+  border: 0;
+  color: var(--light);
+  border-radius: 5px;
+  margin: 0 5px;
+  background: var(--secondary);
+}
 
-.table-wrapper, table, th, td {
-  border: 1px solid var(--medium);
+table, th, td {
+  min-width: 100%;
+  border: 1px solid var(--grey);
   border-collapse: collapse;
 }
 th, td {
   padding: 10px;
   white-space: nowrap;
   width: fit-content;
+  text-align: center;
 }
 th {
   background: rgb(177, 230, 247);

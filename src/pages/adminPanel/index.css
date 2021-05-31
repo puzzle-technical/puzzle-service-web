@@ -5,3 +5,7 @@
 .admin-page-title:not(:first-child) {
   margin-top: 50px;
 } 
+
+.admin-page .button {
+  float: right;
+}

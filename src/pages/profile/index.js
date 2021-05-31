@@ -15,6 +15,8 @@ import UploadImage from '../../components/uploadImage'
 import Select from 'react-select'
 import Modal from '../../components/modal'
 import Loading from '../../components/loading'
+import IconInput from '../../components/iconInput'
+import { ReactComponent as EyeIcon } from '../../assets/icons/eye.svg'
 import { ReactComponent as SearchIcon } from '../../assets/icons/search.svg'
 
 export default function Profile () {
@@ -25,6 +27,12 @@ export default function Profile () {
   const [userType] = useState(user.tipoUser == 'client' ? 0 : 1)
   const [nome, setNome] = useState(user.nome)
   const [email, setEmail] = useState(user.email)
+
+  const [showPasswordFields, setShowPasswordFields] = useState(false)  
+  const [senha, setSenha] = useState()
+  const [showSenha, setShowSenha] = useState()
+  const [senhaConfirm, setSenhaConfirm] = useState()
+  const [showSenhaConfirm, setShowSenhaConfirm] = useState()
   
   const [cpf, setCpf] = useState(user.cpf)
   let birthdate = new Date(user.dataNasc).toISOString().split('T')[0]
@@ -120,6 +128,13 @@ export default function Profile () {
     setShowModal(true)
     return
   }
+  
+  const toggleShowSenha = () => {
+    setShowSenha(!showSenha)
+  }
+  const toggleShowSenhaConfirm = () => {
+    setShowSenhaConfirm(!showSenhaConfirm)
+  }
 
   const formIsValid = () => {
     // nome
@@ -127,6 +142,25 @@ export default function Profile () {
       return displayAlert(<p>
         O nome só pode conter letras e espaços.
       </p>, 'Nome inválido')
+
+
+    if (showPasswordFields) {
+      // senha
+      if (!senha.match(/^(?=.*[0-9])(?=.*[a-zA-Z])([^\s]{5,15})$/)) 
+        return displayAlert(<p>
+          As senhas precisam satisfazer as seguintes condições:
+          <br/>
+          <br/>- Deve ter entre 5 e 15 caracteres
+          <br/>- Deve ter no mínimo um número e uma letra
+          <br/>- Não pode conter espaços.
+        </p>, 'Senha inválida')
+
+      if (senha != senhaConfirm) {
+        return displayAlert(<p>
+          As senhas estão diferentes. Por favor digite a mesma senha nos dois campos.
+        </p>, 'Senha inválida')
+      }
+    }
 
     // cpf
     if (!cpf.match(/\d{3}.\d{3}.\d{3}-\d{2}/))
@@ -196,6 +230,7 @@ export default function Profile () {
       cep: cep,
       infoAdicional: infoAdicional
     }
+    if (showPasswordFields) formData.senha = senha
 
     console.log(formData)
     console.log('selectedSubcat', selectedSubcategories);
@@ -343,6 +378,36 @@ export default function Profile () {
       </div>
     </section>
 
+    <section className="signup-section">
+      <h2>Mudar senha</h2>
+      { showPasswordFields ?
+        <div className="row">
+          <div className="signup-field">
+            <label>Senha</label>
+            <IconInput borderless required type={showSenha ? 'text' : 'password'}
+              value={senha} onChange={e => setSenha(e.target.value)}
+              right={
+                <button className="button-simple" type="button" onClick={toggleShowSenha}>
+                  <EyeIcon width={20} color={showSenha ? '#333' : '#aaa'}/>
+                </button>
+              }>
+            </IconInput>
+          </div>
+          <div className="signup-field">
+            <label>Confirmar senha</label>
+            <IconInput borderless required type={showSenhaConfirm ? 'text' : 'password'}
+              value={senhaConfirm} onChange={e => setSenhaConfirm(e.target.value)}
+              right={
+                <button className="button-simple" type="button" onClick={toggleShowSenhaConfirm}>
+                  <EyeIcon width={20} color={showSenhaConfirm ? '#333' : '#aaa'}/>
+                </button>
+              }>
+            </IconInput>
+          </div>
+        </div>
+        : <button className="button" onClick={() => setShowPasswordFields(true)}>ATUALIZAR SENHA</button>
+      }
+    </section>
     
     <section className="signup-section">
       <h2>Endereço</h2>

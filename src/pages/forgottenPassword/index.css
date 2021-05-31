@@ -1,0 +1,27 @@
+.forgotten-password-page {
+  box-sizing: border-box;
+  color: var(--light);
+  background: var(--primary);
+  display: flex;
+  justify-content: space-between;
+  min-height: 100vh;
+}
+.forgotten-password-page .logo {
+  background: white;
+  border-radius: 10px;
+  padding: 20px;
+  height: fit-content;
+}
+
+.forgotten-password-page .title {
+  margin-top: 0;
+}
+
+.forgotten-password-page .input {
+  border-radius: 5px;
+  border: 1px solid var(--grey);
+  box-sizing: border-box;
+  padding: 10px;
+  width: 100%;
+  margin-bottom: 20px;
+}

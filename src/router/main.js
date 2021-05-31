@@ -6,6 +6,8 @@ import {
 } from "react-router-dom";
 
 import Home from '../pages/home'
+import Services from '../pages/services'
+
 import Button from '../components/button';
 import Navbar from '../components/navbar';
 import Footer from '../components/footer';
@@ -25,9 +27,7 @@ export default function MainRouter () {
       <Switch>
         
         <Route exact path={`/services`}>
-          <div>
-            <h1>Services</h1>
-          </div>
+          <Services/>
         </Route>
 
         <Route path={path}>

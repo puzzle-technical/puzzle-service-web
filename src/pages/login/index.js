@@ -93,7 +93,7 @@ export default function Login() {
         </div>
         <div className="login-field">
           <div className="login-alternative">
-            <Link to="" className="login-alternative-link">Esqueceu a senha?</Link>
+            <Link to="/forgotten-password" className="login-alternative-link">Esqueceu a senha?</Link>
             <Link to="/signUp/0" className="login-alternative-link">Cadastre-se →</Link>
           </div>
         </div>
