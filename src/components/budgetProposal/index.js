@@ -40,7 +40,10 @@ export default function BudgetProposal(props) {
       if (!res.data.success) return displayAlert(res.data.feedback, 'Erro')
       onRemove()
     })
-    .catch(err => console.log(err))
+    .catch(err => {
+      console.log(err)
+      displayAlert('Ocorreu algum erro. Tente novamente mais tarde.', 'Erro')
+    })
   }
 
   const displayAlert = (content, title = 'Atenção', onConfirmation) => {
@@ -77,9 +80,9 @@ export default function BudgetProposal(props) {
       }
     </div>
     
-    <buton className="service-box-button">
+    <button className="service-box-button">
       <Dropdown textAlign="right" element={element} dropdownOptions={dropdownOptions} ></Dropdown>
-    </buton>
+    </button>
     <Modal active={showModal} onClose={() => setShowModal(false)} onConfirmation={modalInfo.onConfirmation} title={modalInfo.title}>
       {modalInfo.content}
     </Modal>

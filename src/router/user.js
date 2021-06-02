@@ -71,7 +71,7 @@ export default function UserRouter () {
 
   const menuOptions = [
     <Link to={createServicePath} className={`button-simple ${location.pathname == createServicePath ? 'active' : ''}`}>
-      NOVO SERVIÇO
+      PROPOR SERVIÇO
     </Link>,
     <Link to={mainPath} className={`button-simple ${[mainPath, singleServicePath, editServicePath].indexOf(location.pathname) >= 0 ? 'active' : ''}`}>
       NEGOCIAÇÕES

@@ -80,9 +80,9 @@ export default function UserNegotiation (props) {
         </div>
       </div>
 
-      <buton className="negotiation-box-button">
+      <button className="negotiation-box-button">
         <Dropdown element={element} dropdownOptions={dropdownOptions} textAlign="right"></Dropdown>
-      </buton>
+      </button>
     </div>
   )
 

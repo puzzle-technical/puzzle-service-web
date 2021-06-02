@@ -3,7 +3,7 @@
   justify-content: center;
   align-items: center;
   gap: 7%;
-  height: 70vh;
+  height: fit-content;
   min-height: 280px;
   padding: 70px 0;
 }
@@ -14,6 +14,7 @@
   overflow: hidden;
   padding: 20px;
   min-width: 200px;
+  min-height: fit-content;
   height: 100%;
   display: grid;
   grid-template-rows: 60px 50px 50px auto 50px;

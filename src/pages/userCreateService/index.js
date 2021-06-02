@@ -154,13 +154,17 @@ export default function UserMain () {
     axios.get(`https://viacep.com.br/ws/${cep.replace(/\D/, '')}/json/`)
     .then(res => {
       console.log(res)
+      if (res.data.erro) throw new Error()
       setBairro(res.data.bairro)
       setCep(res.data.cep)
       setComplemento(res.data.complemento)
       setCidade(res.data.localidade)
       setLogradouro(res.data.logradouro)
     })
-    .catch(err => console.log(err))
+    .catch(err => {
+      console.log(err)
+      displayAlert('Erro ao buscar dados pelo CEP. Certifique-se de que colocou um CEP válido e que existe.')
+    })
   }
 
   const displayAlert = (content, title = 'Atenção', onConfirmation) => {
@@ -307,7 +311,7 @@ export default function UserMain () {
       <div className="row">
         <Select
           placeholder=""
-          value={selectedSubcategories}
+          defaultValue={selectedSubcategories}
           isMulti
           noOptionsMessage={() => 'Sem categorias disponíveis'}
           options={availableSubcategories}

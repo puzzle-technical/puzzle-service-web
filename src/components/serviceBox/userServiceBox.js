@@ -69,9 +69,9 @@ export default function ServiceBox (props) {
         }
       </div>
     </div>
-    <buton className="service-box-button">
+    <button className="service-box-button">
       <Dropdown element={element} dropdownOptions={dropdownOptions} ></Dropdown>
-    </buton>
+    </button>
     
     <Modal active={showModal} onClose={() => setShowModal(false)} onConfirmation={modalInfo.onConfirmation} title={modalInfo.title}>
       {modalInfo.content}

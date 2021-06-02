@@ -39,3 +39,8 @@
 .negotiation-box-adress {
   margin: 5px 0;  
 }
+
+.negotiation-box-button {
+  border: 0;
+  background: transparent;
+}

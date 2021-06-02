@@ -59,7 +59,9 @@
   font-weight: normal;
   color: var(--primary);
 }
-.service-box-button{
+.service-box-button {
+  border: 0;
+  background: transparent;
   width: 40px;
   display: flex;
   justify-content: center;

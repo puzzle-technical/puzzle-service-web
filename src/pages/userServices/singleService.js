@@ -63,6 +63,19 @@ export default function UserServices(props) {
     </div>
   })()
 
+  const publishService = async () => {
+    await api.put(`services/update/${idService}`, { service: { status: 'aberto' } })
+    .then(res => {
+      console.log(res.data)
+      if (res.data.success) return displayAlert(res.data.feedback, 'Sucesso', () => { history.push('/user') })
+      else displayAlert('Ocorreu algum erro. Tente novamente mais tarde ou contate o suporte.', 'Erro')
+    })
+    .catch(err => {
+      console.log(err)
+      displayAlert('Ocorreu algum erro. Tente novamente mais tarde ou contate o suporte.', 'Erro')
+    })
+  }
+
   return <div className="user-services-page">
     
     <div className="single-service-info">
@@ -89,7 +102,11 @@ export default function UserServices(props) {
           <CreateBudget service={service} user={user}></CreateBudget>
         </div> :
 
+        status == 'rascunho' ?
         <div>
+          <button className="button" onClick={() => publishService()}>PUBLICAR SERVIÇO</button>
+        </div>
+        : <div>
           <h3>Propostas recebidas</h3>
           {
             !budgetProposals.length > 0 ? <p>Nenhuma proposta foi feita ainda.</p> :

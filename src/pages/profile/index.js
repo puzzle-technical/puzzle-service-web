@@ -314,6 +314,7 @@ export default function Profile () {
     axios.get(`https://viacep.com.br/ws/${cep.replace(/\D/, '')}/json/`)
     .then(res => {
       console.log(res)
+      if (res.data.erro) throw new Error()
       setBairro(res.data.bairro)
       setCep(res.data.cep)
       setComplemento(res.data.complemento)
@@ -323,7 +324,10 @@ export default function Profile () {
       let uf = availableUFs.find(el => el.sigla == res.data.uf)
       setSelectedUF({ id: uf.id, value: uf.sigla, label: uf.sigla })
     })
-    .catch(err => console.log(err))
+    .catch(err => {
+      console.log(err)
+      displayAlert('Erro ao buscar dados pelo CEP. Certifique-se de que colocou um CEP válido e que existe.')
+    })
   }
 
   return <>
