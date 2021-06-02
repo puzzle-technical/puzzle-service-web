@@ -57,8 +57,8 @@ export default function BudgetProposal(props) {
         <div className="proposal-provider-avatar" style={{ backgroundImage: `url(${imgSrc})` }}></div>
         <div>
           <p>{nome}</p>
-          <p>{email}</p>
-          <p>{celular}</p>
+          <p style={{ fontSize: '.9rem' }}>{email}</p>
+          <p style={{ fontSize: '.9rem' }}>{celular}</p>
         </div>
       </div>
       <p>{ subcategories && subcategories.length && `Trabalha com: ${subcategories.map(el => el.nome).join(', ')}` }</p>

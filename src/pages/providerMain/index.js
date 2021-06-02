@@ -1,6 +1,6 @@
 import './index.css'
 import ServiceBox from '../../components/serviceBox'
-import { useHistory } from 'react-router-dom'
+import { useHistory, Link } from 'react-router-dom'
 import { useState, useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { updateUser } from '../../store/actions/userActions'
@@ -36,8 +36,8 @@ export default function ProviderMain (props) {
   const openService = (service) => {
     servicePoints > user.puzzlePoints ?
     displayAlert(<div>
-      <p>Você não possui <strong>PuzzlePoints</strong> suficientes.</p>
-      <button className="button">Adquirir PuzzlePoints</button>
+      <p>Você não possui <strong>PuzzlePoints</strong> suficientes.</p><br/>
+      <Link to="/user/points" className="button">Adquirir PuzzlePoints</Link>
     </div>, 'Pontos insuficientes') :
     displayAlert(<div>
       <p>Você irá gastar <strong>PuzzlePoints</strong> para esta ação.</p>

@@ -48,8 +48,8 @@ export default function ProviderNegotiation (props) {
           <div className="proposal-provider-avatar" style={{ backgroundImage: `url(${imgSrc})` }}></div>
           <div>
             <p>{provider?.nome}</p>
-            <p>{provider?.email}</p>
-            <p>{provider?.celular}</p>
+            <p style={{ fontSize: '.9rem' }}>{provider?.email}</p>
+            <p style={{ fontSize: '.9rem' }}>{provider?.celular}</p>
           </div>
         </div><br/>
         <button className="proposal-provider-button button" onClick={() => {

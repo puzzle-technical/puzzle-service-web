@@ -67,6 +67,7 @@ export default function UserServices(props) {
     
     <div className="single-service-info">
       <div className="single-service-header">
+        <div className="single-service-back-button" onClick={() => history.push('/user')}><BackIcon width={15}></BackIcon></div>
         <h3 className="single-service-title">{nome}</h3>
         <span className="single-service-date">{(new Date(dataPublic)).toLocaleString()}</span>
       </div>

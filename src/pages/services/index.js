@@ -13,7 +13,7 @@ export default function Services () {
       .then(res => {
         let opt = []
         res.data.data.map(cat => {
-          let closed = <h3 className="title">{cat.nome}</h3>
+          let closed = <h3 className="title">{cat.nome.toUpperCase()}</h3>
           let opened = <div>
             <h3 className="title">{cat.nome}</h3>
             <li className="list">

@@ -110,6 +110,10 @@ export default function UserSignUp () {
       return displayAlert(<p>
         O nome só pode conter letras e espaços.
       </p>, 'Nome inválido')
+    if (nome.split(' ').length <= 1) 
+      return displayAlert(<p>
+        Nome e sobrenome necessários.
+      </p>, 'Nome inválido')
 
     // senha
     if (!senha.match(/^(?=.*[0-9])(?=.*[a-zA-Z])([^\s]{5,15})$/)) 
@@ -274,7 +278,7 @@ export default function UserSignUp () {
     <section className="signup-header">
       <div>
         <h2>Tipo de conta</h2>
-        <div className="signup-type">
+        <div className="signup-type" >
           <label className={`signup-usertype ${userType == 0 ? 'selected' : ''}`}>
             <input type="radio" name="type" value={0} onChange={handleTypeChange}></input> Cliente
           </label>
@@ -289,17 +293,17 @@ export default function UserSignUp () {
     <section className="signup-section">
       <h2>Preencha seus dados</h2>
       <div className="row">
-        <div className="signup-field">
+        <div className="signup-field" title={`- Campo obrigatório\n- Nome e sobrenome`}>
           <label>Nome completo</label>
           <input type="text" value={nome} onChange={e => setNome(e.target.value)} required></input>
         </div>
-        <div className="signup-field">
+        <div className="signup-field" title={`- Campo obrigatório\n- Espaços não são permitidos`}>
           <label>Email</label>
           <input type="email" value={email} onChange={e => setEmail(e.target.value)} required></input>
         </div>
       </div>
       <div className="row">
-        <div className="signup-field">
+        <div className="signup-field" title={`- Campo obrigatório\n- Deve ter entre 5 e 15 caracteres\n- Deve ter no mínimo um número e uma letra\n- Não pode conter espaços`}>
           <label>Senha</label>
           <IconInput borderless required type={showSenha ? 'text' : 'password'}
             value={senha} onChange={e => setSenha(e.target.value)}
@@ -310,7 +314,7 @@ export default function UserSignUp () {
             }>
           </IconInput>
         </div>
-        <div className="signup-field">
+        <div className="signup-field" title={`- Campo obrigatório\n- As senhas devem ser iguais`}>
           <label>Confirmar senha</label>
           <IconInput borderless required type={showSenhaConfirm ? 'text' : 'password'}
             value={senhaConfirm} onChange={e => setSenhaConfirm(e.target.value)}
@@ -323,16 +327,16 @@ export default function UserSignUp () {
         </div>
       </div>
       <div className="row">
-        <div className="signup-field">
+        <div className="signup-field" title={`- Campo obrigatório\n- Apenas números permitidos\n- Todos os números do cpf necessários`}>
           <label>CPF</label>
           <InputMask value={cpf} required onChange={e => setCpf(e.target.value)}
           mask="999.999.999-99" maskChar="_"></InputMask>
         </div>
-        <div className="signup-field">
+        <div className="signup-field" title={`- Campo obrigatório\n- Apenas números permitidos\n- O ano deve estar entre 1910 e ${(new Date().getFullYear() - 18)}`}>
           <label>Data de nascimento</label>
           <input type="date" value={data} required onChange={e => setData(e.target.value)}></input>
         </div>
-        <div className="signup-field">
+        <div className="signup-field" title={`- Campo obrigatório`}>
           <label>Telefone</label>
           <InputMask value={phone} required onChange={e => setPhone(e.target.value)}
           mask="(99) 99999-9999" maskChar="_"></InputMask>
@@ -344,7 +348,7 @@ export default function UserSignUp () {
     <section className="signup-section">
       <h2>Endereço</h2>
       <div className="row">
-        <div className="signup-field">
+        <div className="signup-field" title={`- Campo obrigatório`}>
           <label>CEP</label>
           <InputMask value={cep} required onChange={e => setCep(e.target.value)}
           mask="99.999-999" maskChar="_"></InputMask>
@@ -352,7 +356,7 @@ export default function UserSignUp () {
             <SearchIcon width={20} color="#777"/>
           </button>
         </div>
-        <div className="signup-field s25 uf-select">
+        <div className="signup-field s25 uf-select" title={`- Campo obrigatório`}>
           <label>UF</label>
           <Select
             placeholder=""
@@ -364,19 +368,19 @@ export default function UserSignUp () {
             classNamePrefix="select">
           </Select>
         </div>
-        <div className="signup-field">
+        <div className="signup-field" title={`- Campo obrigatório`}>
           <label>Cidade</label>
           <input type="text" value={cidade} id="cidade" onChange={e => setCidade(e.target.value)} required></input>
         </div>
       </div>
       <div className="row">
-        <div className="signup-field">
+        <div className="signup-field" title={`- Campo obrigatório`}>
           <label>Logradouro</label>
           <input type="text" value={logradouro} id="logradouro" onChange={e => setLogradouro(e.target.value)} required></input>
         </div>
       </div>
       <div className="row">
-        <div className="signup-field s25">
+        <div className="signup-field s25" title={`- Campo obrigatório`}>
           <label>Nº</label>
           <input type="number" value={numero} id="numero" onChange={e => setNumero(e.target.value)} required></input>
         </div>
@@ -384,7 +388,7 @@ export default function UserSignUp () {
           <label>Complemento</label>
           <input type="text" value={complemento} id="complemento" onChange={e => setComplemento(e.target.value)}></input>
         </div>
-        <div className="signup-field">
+        <div className="signup-field" title={`- Campo obrigatório`}>
           <label>Bairro</label>
           <input type="text" value={bairro} if="bairro" onChange={e => setBairro(e.target.value)} required></input>
         </div>
@@ -394,7 +398,7 @@ export default function UserSignUp () {
     {userType == 1 && <section className="signup-section">
       <h2>Trabalho</h2>
       <div className="row">
-        <div className="fluid">
+        <div className="fluid" title={`- Campo obrigatório\n- Deve ter no mínimo uma área de atuação`}>
           <h3 className="signup-label">Áreas de atuação</h3>
           <Select
             placeholder=""
@@ -413,7 +417,7 @@ export default function UserSignUp () {
         </div> */}
       </div>      
       <div className="row">
-        <div className="fluid">
+        <div className="fluid" title={`- Campo obrigatório\n- Deve ter no mínimo um local de atuação`}>
           <h3 className="signup-label">Locais de atuação</h3>
           <Select
             value={selectedLocations}

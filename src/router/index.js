@@ -8,6 +8,7 @@ import { verifyUserAuth } from "../services/auth";
 import SignUp from '../pages/signUp'
 import Login from "../pages/login";
 import ForgottenPassword from "../pages/forgottenPassword";
+import BuyPuzzlePoints from "../pages/providerPoints/buyPuzzlePoints";
 import LoadingPage from '../components/loading/loadingPage'
 
 import MainRouter from './main';
@@ -64,6 +65,10 @@ export default function RouterView() {
 
       <Route path="/forgotten-password">
         <ForgottenPassword/>
+      </Route>
+
+      <Route path="/buy-puzzle-points">
+        <BuyPuzzlePoints/>
       </Route>
 
       <Route path="/">

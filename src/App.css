@@ -8,6 +8,7 @@ html, body {
   text-decoration: none;
   list-style: none;
   outline: none;
+  box-sizing: border-box;
 }
 
 a {

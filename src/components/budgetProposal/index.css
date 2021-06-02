@@ -3,11 +3,9 @@
   border-radius: 5px;
   padding: 20px;
   margin: 15px 0;
-  display: flex;
+  display: grid;
+  grid-template-columns: 28% 70% 2%;
   align-items: flex-start;
-}
-.proposal-provider {
-  width: 33%;
 }
 .proposal-provider-header {
   display: flex;
@@ -51,6 +49,7 @@
 }
 
 .proposal-descricao {
-  white-space: pre;
+  /* white-space: pre;
+  word-wrap: normal; */
   margin: 20px 0 25px;
 }

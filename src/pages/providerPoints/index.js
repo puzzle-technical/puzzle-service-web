@@ -1,27 +1,21 @@
 import './index.css'
 import { useState, useEffect } from 'react'
-import { useSelector } from 'react-redux'
-import { getUser } from '../../store/selectors/userSelectors'
+import { useHistory } from 'react-router-dom'
 import api from '../../api'
-import stripePromise from '../../services/stripe' 
 
 import Loading from '../../components/loading'
-import Modal from '../../components/modal'
 
-export default function ProviderPoints (props) {
-  const user = useSelector(getUser)
+export default function ProviderPoints () {
+  const history = useHistory()
   const [packs, setPacks] = useState([])
 
   const [loading, setLoading] = useState(true)
-  const [showModal, setShowModal] = useState()
-  const [modalInfo, setModalInfo] = useState({})
-  const [operationSuccess, setOperationSuccess] = useState()
 
   useEffect(() => {
     const load = async () => {
       await api.get('points/getPacks')
       .then(res => {
-        console.log(res.data)
+        console.log('packs', res.data)
         setPacks(res.data.data)
         setLoading(false)
       })
@@ -33,55 +27,30 @@ export default function ProviderPoints (props) {
     })
   }, [])
 
-  const selectPack = async (idPack) => {
+  const selectPack = async (pack) => {
     setLoading(true)
-    const stripe = await stripePromise
-    const response = await api.post('points/createCheckoutSession', { idPack, email: user.email })
-    .then(async res => {
-      console.log(res.data)
-      if (res.data.success) {
-        const result = await stripe.redirectToCheckout(res.data.data)
-      }
-    })
-    .catch(err => {
-      console.log(err)
-      displayAlert('Ocorreu algum erro. Tente novamente mais tarde.', 'Erro')
-    })
-  }
-
-  const displayAlert = (content, title = 'Atenção', onConfirmation) => {
-    setModalInfo({ title, content, onConfirmation })
-    setShowModal(true)
-    return
-  }
-
-  const onModalClose = () => {
-    setLoading(false)
-    setShowModal(false)
-    if (operationSuccess) return true
+    history.push({ pathname: '/buy-puzzle-points', state: { pack } })
   }
 
   return <div className="points-page">
     { loading ? <Loading></Loading> :
       packs.length > 0 ?
       packs.map(pack => {
-        return <div key={pack.idPack} className="pack">
+        const { idPack, backgroundImage, quantity, price, discount } = pack
+        return <div key={idPack} className="pack">
           <div className="pack-background">
-            <img src={pack.backgroundImage}></img>
+            <img src={backgroundImage}></img>
           </div>
           <h2 className="pack-title">PuzzlePoints</h2>
-          <p className="pack-description">{pack.amount} PuzzlePoints</p>
+          <p className="pack-description">{quantity} PuzzlePoints</p>
           <div>
-            <p className="pack-price">{Intl.NumberFormat('pt-br', { style: 'currency', currency: 'BRL' }).format(pack.price / 100)}</p>
-            <p className="pack-discount">{pack.discount ? `${pack.discount}% de desconto` : ''}</p>
+            <p className="pack-price">{Intl.NumberFormat('pt-br', { style: 'currency', currency: 'BRL' }).format(price / 100)}</p>
+            <p className="pack-discount">{discount ? `${discount}% de desconto` : ''}</p>
           </div>
-          <button className="button" onClick={() => selectPack(pack.idPack)}>ADQUIRIR</button>
+          <button className="button" onClick={() => selectPack(pack)}>ADQUIRIR</button>
         </div>
       }) :
       <p>Houve algum erro. Por favor, contate o suporte.</p>
     }
-    <Modal active={showModal} onClose={onModalClose} onConfirmation={modalInfo.onConfirmation} title={modalInfo.title}>
-      {modalInfo.content}
-    </Modal>
   </div>
 }

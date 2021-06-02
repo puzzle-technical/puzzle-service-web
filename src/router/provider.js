@@ -122,15 +122,6 @@ export default function UserRouter (props) {
           <ProviderPoints></ProviderPoints>
         </Route>
 
-        <Route exact path={pointsSuccessPaymentPath}>
-        <div className="points-success-payment">
-          <h1>PuzzlePoints adquiridos com sucesso!</h1>
-          <p>Sua transação foi bem sucedida. Aproveite os seus pontos e em qualquer dúvida, fale conosco.</p>
-          <br/>
-          <Link to={mainPath} className="button">PROCURAR SERVIÇOS</Link>
-        </div>
-        </Route>
-
         <Route exact path={profilePath}>
           <Profile></Profile>
         </Route>
