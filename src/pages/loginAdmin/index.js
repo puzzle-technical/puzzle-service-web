@@ -53,7 +53,7 @@ export default function Login() {
     if (result.success) {
       dispatch(saveAdminToken(result.data.token))
       dispatch(updateAdminUser(result.data.user))
-      history.push('/admin-puzzle/')
+      history.push('/admin-puzzle')
     } else {
       return displayAlert(result.feedback, 'Erro')
     }

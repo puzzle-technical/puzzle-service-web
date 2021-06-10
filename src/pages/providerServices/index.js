@@ -52,7 +52,7 @@ export default function ProviderServices (props) {
   return <div className="user-services-page">
     {services.length ? 
       services.map((el, id) => {
-        return <ServiceBox key={id} service={el} onSelectService={() => openService(el)}></ServiceBox>
+        return <ServiceBox key={id} service={el} onSelectService={() => openService(el)} isOpened></ServiceBox>
       }) :
       <p>Nenhum serviço encontrado.</p>
     }

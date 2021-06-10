@@ -51,7 +51,7 @@ export default function UserServices(props) {
 
   const userInfo = (() => {
     if (!serviceUser) return <p></p>
-    let { nome, email, celular, avatar } = user
+    let { nome, email, celular, avatar } = serviceUser
     let imgSrc = avatar || defaultAvatar
     return <div className="service-box-user-info">
       <div className="service-box-user-avatar" style={{ backgroundImage: `url(${imgSrc})`}}></div>

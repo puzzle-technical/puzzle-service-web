@@ -83,7 +83,7 @@ export default function UserServices(props) {
 
     {openedServices.length == 0 && <div className="user-services">
       <h2>Serviços publicados</h2>
-      <p>Você ainda não publicou nenhuma proposta de serviço.</p>
+      <p>Você não tem propostas de serviço publicadas.</p>
     </div>}
     { openedServices.length > 0 && <div className="user-services">
         <h2>Serviços publicados</h2>

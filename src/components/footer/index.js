@@ -13,7 +13,7 @@ export default function Footer() {
       </div>
       <div className="element">
         <MailIcon width={20} color="#fff"></MailIcon>
-        <span>puzzletechnical@gmail.com</span>
+        <span>contato@puzzleservice.site</span>
       </div>
     </div>
   </div>

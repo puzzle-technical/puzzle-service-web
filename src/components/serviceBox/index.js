@@ -9,7 +9,7 @@ import puzzlePoint from '../../assets/img/puzzlePoint.png'
 import defaultAvatar from '../../assets/img/defaultAvatar.png'
 
 export default function ServiceBox (props) {
-  const { service, onSelectService, servicePoints } = props
+  const { service, onSelectService, servicePoints, isOpened } = props
   const { nome, descricao, dataPublic, location, subcategories, user } = service
 
   const userInfo = (() => {
@@ -26,9 +26,9 @@ export default function ServiceBox (props) {
     return <div className="service-box-user-info">
       <div className="service-box-user-avatar" style={{ backgroundImage: `url(${imgSrc})`}}></div>
       <div>
-        <p>{fnome}</p>
-        <p>{femail}</p>
-        <p>{fcelular}</p>
+        <p>{isOpened ? nome : fnome}</p>
+        <p>{isOpened ? email : femail}</p>
+        <p>{isOpened ? celular : fcelular}</p>
       </div>
     </div>
   })()

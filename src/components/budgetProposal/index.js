@@ -64,7 +64,7 @@ export default function BudgetProposal(props) {
           <p style={{ fontSize: '.9rem' }}>{celular}</p>
         </div>
       </div>
-      <p>{ subcategories && subcategories.length && `Trabalha com: ${subcategories.map(el => el.nome).join(', ')}` }</p>
+      <p>{ subcategories && subcategories.length ? `Trabalha com: ${subcategories.map(el => el.nome).join(', ')}` : '' }</p>
     </div>
     <div className="proposal-content">
       <h4 className="proposal-title">
