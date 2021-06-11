@@ -1,40 +1,95 @@
 import './index.css'
-import { useState } from 'react'
-import { useHistory } from 'react-router-dom'
-import api from '../../api'
+import { useState, useEffect } from 'react'
+import { useSelector } from 'react-redux'
+import { getUser } from '../../store/selectors/userSelectors'
 import DefaultAvatar from '../../assets/img/defaultAvatar.png'
 import { ReactComponent as CommentIcon } from '../../assets/icons/comment.svg';
 
+import api from '../../api'
 import Dropdown from '../dropDown'
 import Modal from '../modal'
+import Stars from '../stars'
+import Evaluation from '../stars/evaluation'
 import { ReactComponent as EllipsisIcon } from '../../assets/icons/ellipsis-vertical.svg';
 
 const useMailto = true
 
 export default function UserNegotiation (props) {
+  const user = useSelector(getUser)
   const { service, active } = props
-  const { idService, nome, descricao, dataPublic, location, subcategories } = service
+  const { nome, descricao, dataPublic, location, subcategories } = service
   const budget = service.budgets.find(el => el.status == 'selecionado')
   const provider = budget?.provider
   const imgSrc = provider?.avatar || DefaultAvatar
-  const history = useHistory()
+  const idRatedUser = provider?.idUser
+  const idEvaluatorUser = user.idUser
+
+  const [alreadyRated, setAlreadyRated] = useState()
+
+  useEffect(() => {
+    const check = async () => {
+      api.get(`/users/checkRatingExists/${idRatedUser}/${idEvaluatorUser}`)
+      .then(res => {
+        console.log(res.data);
+        if (res.data.success) setAlreadyRated(res.data.data)
+      })
+      .catch(err => console.log(err))
+    }
+    check()
+  }, [])
 
   const element = <EllipsisIcon height={20}></EllipsisIcon>
 
-  const dropdownOptions = [    
+  const dropdownOptions = [
     <div onClick={() => {
-      displayAlert('Tem certeza que deseja cancelar esta negociação?\nO serviço voltará a ficar aberto para novas propostas.', '', () => {
-        cancelNegotiation()
+      displayAlert('Tem certeza que deseja concluir esta negociação?', '', () => {
+        finishNegotiation()
       })
     }}>
-      Cancelar negociação
+      Concluir negociação
+    </div>,
+    <div onClick={() => evaluateUser()}>
+      {alreadyRated ? 'Atualizar avaliação' : 'Avaliar usuário'}
     </div>
   ]
 
   const [showModal, setShowModal] = useState()
   const [modalInfo, setModalInfo] = useState({})
 
-  const cancelNegotiation = async () => {
+  const finishNegotiation = async () => {
+  }
+
+  const evaluateUser = () => {
+    let value = 0
+    const setValue = v => value = v
+
+    displayAlert(<div>
+      <Evaluation idRatedUser={idRatedUser} idEvaluatorUser={idEvaluatorUser} onEvaluate={value => setValue(value)}/>
+    </div>,
+    alreadyRated ? 'Atualizar avaliação' : 'Avaliar usuário',
+    () => sendEvaluation(value))
+  }
+
+  const sendEvaluation = async (value) => {
+    console.log(value);
+    if (!value || value <= 0) {
+      return displayAlert('Por favor, escolha uma opção de 1 a 5.', '', () => evaluateUser())
+    }
+    let rating = {
+      idRatedUser,
+      idEvaluatorUser,
+      value
+    }
+
+    api.post(`/users/${alreadyRated ? 'updateRating' : 'addRating'}`, { rating })
+    .then(res => {
+      displayAlert(res.data.feedback, res.data.success ? 'Sucesso' : 'Erro')
+      window.location.reload()
+    })
+    .catch(err => {
+      console.log(err)
+      displayAlert('Ocorreu um erro. Por favor, tente novamente mais tarde ou contate o suporte.', 'Erro')
+    })
   }
 
   const displayAlert = (content, title = 'Atenção', onConfirmation) => {
@@ -52,6 +107,7 @@ export default function UserNegotiation (props) {
             <p>{provider?.nome}</p>
             <p>{provider?.email}</p>
             <p>{provider?.celular}</p>
+            <Stars idRatedUser={provider?.idUser}></Stars>
           </div>
         </div>
         <p>{ subcategories && subcategories.length ? `Trabalha com: ${subcategories.map(el => el.nome).join(', ')}` : '' }</p>

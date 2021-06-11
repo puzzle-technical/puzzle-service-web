@@ -4,22 +4,13 @@ import { getUser } from '../../store/selectors/userSelectors'
 import './index.css'
 
 import DefaultAvatar from '../../assets/img/defaultAvatar.png'
-import { ReactComponent as Star } from '../../assets/icons/star.svg'
+import Stars from '../stars'
 
 export default function ProviderBox (props) {
-  const user = useSelector(getUser)
   const { provider, categories = [], onSelect, alreadySelected, selectable } = props
-  const { nome, avaliacao, cidade, uf} = provider
+  const { idUser, nome, cidade, uf} = provider
   
   const imgSrc = provider.avatar || DefaultAvatar
-
-  var stars = value => {
-    let newArr = []
-    for (let i = 1; i <= 5; i++) {
-      newArr[i-1] = <Star className="star" key={i} width={20} color={i <= value ? '#FFDE5B' : '#FFFFFF'} stroke="#3a3a3a" strokeWidth={20}></Star>      
-    }
-    return newArr
-  }
     
   return <div className="provider-box">
     <div className="provider-box-profile">
@@ -33,7 +24,7 @@ export default function ProviderBox (props) {
           <div>{cidade}/{uf}</div>
         </div>
         <div className="stars">
-          {stars(avaliacao)}
+          <Stars idRatedUser={idUser}></Stars>
         </div>
       </div>
       <p>

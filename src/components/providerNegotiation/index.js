@@ -21,18 +21,18 @@ export default function ProviderNegotiation (props) {
 
   const dropdownOptions = [ 
     <div onClick={() => {
-      displayAlert('Tem certeza que deseja cancelar esta negociação?\nO serviço voltará a ficar aberto para novas propostas.', '', () => {
-        cancelNegotiation()
+      displayAlert('Tem certeza que deseja concluir esta negociação?', '', () => {
+        finishNegotiation()
       })
     }}>
-      Cancelar negociação
+      Concluir negociação
     </div>
   ]
 
   const [showModal, setShowModal] = useState()
   const [modalInfo, setModalInfo] = useState({})
 
-  const cancelNegotiation = async () => {
+  const finishNegotiation = async () => {
   }
 
   const displayAlert = (content, title = 'Atenção', onConfirmation) => {

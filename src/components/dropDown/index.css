@@ -28,8 +28,9 @@
 
 .dropdown-option {
   white-space: nowrap;
-  padding: 5px 10px;
+  padding: 5px 15px;
   color: var(--dark);
+  font-size: 1rem;
 }
 .dropdown-option:hover {
   cursor: pointer;
