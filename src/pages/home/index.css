@@ -42,6 +42,7 @@
 .stars {
   margin-left: 10px;
   font-size: 10px;
+  display: inline-flex;
 }
 .star {
   margin: 0 2px;

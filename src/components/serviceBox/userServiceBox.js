@@ -2,6 +2,7 @@ import './index.css'
 import { useState } from 'react'
 import { useHistory } from 'react-router-dom'
 import api from '../../api'
+import moment from 'moment'
 
 import Dropdown from '../dropDown'
 import Modal from '../modal'
@@ -57,7 +58,7 @@ export default function ServiceBox (props) {
     <div className="service-box-info" onClick={onSelect}>
       <div className="service-box-header">
         <h4 className="service-box-title">{nome}</h4>
-        <span className="service-box-date">{(new Date(dataPublic)).toLocaleString()}</span>
+        <span className="service-box-date">{moment(dataPublic).format('DD/MM/YYYY [às] hh:mm:ss')}</span>
         <p className="service-box-adress">{location ? `${location.bairro} - ${location.cidade}` : ''}</p>
       </div>
       <p>{descricao}</p>

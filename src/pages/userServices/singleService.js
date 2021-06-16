@@ -9,6 +9,7 @@ import Modal from '../../components/modal'
 import BudgetProposal from '../../components/budgetProposal'
 import CreateBudget from '../../components/createBudget'
 import defaultAvatar from '../../assets/img/defaultAvatar.png'
+import moment from 'moment'
 
 export default function UserServices(props) {
   const user = useSelector(getUser)
@@ -82,7 +83,7 @@ export default function UserServices(props) {
       <div className="single-service-header">
         <div className="single-service-back-button" onClick={() => history.push('/user')}><BackIcon width={15}></BackIcon></div>
         <h3 className="single-service-title">{nome}</h3>
-        <span className="single-service-date">{(new Date(dataPublic)).toLocaleString()}</span>
+        <span className="single-service-date">{moment(dataPublic).format('DD/MM/YYYY [às] hh:mm:ss')}</span>
       </div>
       <p>{descricao}</p>
       <br/>
@@ -109,7 +110,7 @@ export default function UserServices(props) {
         : <div>
           <h3>Propostas recebidas</h3>
           {
-            !budgetProposals.length > 0 ? <p>Nenhuma proposta foi feita ainda.</p> :
+            !budgetProposals.length > 0 ? <p>Nenhuma proposta disponível.</p> :
             budgetProposals.map((budget, id) => {
               return <BudgetProposal key={id} budget={budget} disabled={status == 'fechado'}
               onRemove={() => removeProposal(id)}

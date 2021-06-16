@@ -7,6 +7,7 @@ import Dropdown from '../dropDown'
 import Modal from '../modal'
 import { ReactComponent as CommentIcon } from '../../assets/icons/comment.svg';
 import { ReactComponent as EllipsisIcon } from '../../assets/icons/ellipsis-vertical.svg';
+import moment from 'moment'
 
 export default function BudgetProposal(props) {
   const { budget, onRemove, onSelect, disabled } = props
@@ -71,7 +72,7 @@ export default function BudgetProposal(props) {
         <span>Proposta de orçamento</span>
         <CommentIcon width={18}></CommentIcon>
       </h4>
-      <p className="proposal-date">{(new Date(dataPublic)).toLocaleString()}</p>
+      <p className="proposal-date">{moment(dataPublic).format('DD/MM/YYYY [às] hh:mm:ss')}</p>
       <p className="proposal-descricao">{descricao}</p>
       {
         status != 'selecionado' ? 

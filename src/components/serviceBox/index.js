@@ -4,6 +4,7 @@ import { useSelector } from 'react-redux'
 import { getUser } from '../../store/selectors/userSelectors'
 import api from '../../api'
 import Modal from '../../components/modal'
+import moment from 'moment'
 
 import puzzlePoint from '../../assets/img/puzzlePoint.png'
 import defaultAvatar from '../../assets/img/defaultAvatar.png'
@@ -38,7 +39,7 @@ export default function ServiceBox (props) {
       <div className="service-box-header">
         <div>
           <h4 className="service-box-title">{nome}</h4>
-          <span className="service-box-date">{(new Date(dataPublic)).toLocaleString()}</span>
+          <span className="service-box-date">{moment(dataPublic).format('DD/MM/YYYY [às] hh:mm:ss')}</span>
         </div>
         <p className="service-box-adress">{location?.bairro} - {location?.cidade}</p>        
       </div>

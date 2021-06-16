@@ -4,12 +4,14 @@ import { useState, useEffect } from "react"
 import { useSelector, useDispatch } from 'react-redux'
 import InputMask from 'react-input-mask'
 import axios from 'axios'
+import moment from 'moment'
 
 import api from '../../api'
 import { getUFs, getMunicipios } from './../../services/location'
 import { getUser } from '../../store/selectors/userSelectors'
 import { updateUser } from '../../store/actions/userActions'
 
+import Stars from '../../components/stars'
 import DefaultAvatar from '../../assets/img/defaultAvatar.png'
 import UploadImage from '../../components/uploadImage'
 import Select from 'react-select'
@@ -35,7 +37,7 @@ export default function Profile () {
   const [showSenhaConfirm, setShowSenhaConfirm] = useState()
   
   const [cpf, setCpf] = useState(user.cpf)
-  let birthdate = new Date(user.dataNasc).toISOString().split('T')[0]
+  let birthdate = moment(user.dataNasc).format('DD/MM/YYYY')
   const [data, setData] = useState(birthdate)
   const [phone, setPhone] = useState(user.celular)
   const [cep, setCep] = useState(user.cep)
@@ -367,7 +369,7 @@ export default function Profile () {
             </div>
             <div className="signup-field">
               <label>CPF</label>
-              <InputMask value={cpf} required onChange={e => setCpf(e.target.value)}
+              <InputMask disabled value={cpf} required onChange={e => setCpf(e.target.value)}
               mask="999.999.999-99" maskChar="_"></InputMask>
             </div>
             <div className="signup-field">
@@ -465,6 +467,10 @@ export default function Profile () {
 
     {userType == 1 && <section className="signup-section">
       <h2>Trabalho</h2>
+      <div className="">
+        <h3 className="signup-label">Avaliações</h3>
+        <Stars idRated={user.idUser}></Stars>
+      </div>
       <div className="row">
         <div className="fluid">
           <h3 className="signup-label">Áreas de atuação</h3>

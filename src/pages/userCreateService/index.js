@@ -198,7 +198,7 @@ export default function UserMain () {
       status
     }
     api.post('services/create', data)
-    .then(res => {
+    .then(async res => {
       console.log(res)
       setLoading(false)
       let successFeedback = res.data.feedback
@@ -210,40 +210,33 @@ export default function UserMain () {
       } else successFeedback = res.data.feedback
 
       let idService = res.data.data.insertId
-      selectedSubcategories.forEach(cat => {
-        api.post('services/addSubcategory', { idService, idSubcategory: cat.id })
+      let promises = selectedSubcategories.map(cat => {
+        return api.post('services/addSubcategory', { idService, idSubcategory: cat.id })
         .then(res => {
           console.log(res)
-          if (!res.data.success) {
-            setOperationSuccess(false)
-            displayAlert(<p>{res.data.feedback}</p>, 'Erro', resetFields)
-            return
-          } else {
-            setOperationSuccess(true)
-            displayAlert(<p>{successFeedback}</p>, 'Sucesso', resetFields)
-          }
         })
-        let location = {
-          uf: user.uf,
-          logradouro: logradouro,
-          numero: numero,
-          complemento: complemento,
-          bairro: bairro,
-          cidade: cidade,
-          cep: cep
-        }
-        api.post('services/addLocation', { idService, location })
-        .then(res => {
-          console.log(res)
-          if (!res.data.success) {
-            setOperationSuccess(false)
-            displayAlert(<p>{res.data.feedback}</p>, 'Erro', resetFields)
-            return
-          } else {
-            setOperationSuccess(true)
-            displayAlert(<p>{successFeedback}</p>, 'Sucesso', resetFields)
-          }
-        })
+      })
+      await Promise.all(promises)
+      
+      let location = {
+        uf: user.uf,
+        logradouro: logradouro,
+        numero: numero,
+        complemento: complemento,
+        bairro: bairro,
+        cidade: cidade,
+        cep: cep
+      }
+      await api.post('services/addLocation', { idService, location })
+      .then(res => {
+        console.log(res)
+      })
+      
+      displayAlert(<p>{successFeedback}</p>, 'Sucesso', () => {
+        displayAlert(<div>
+          <p>O seu serviço irá expirar depois de 3 dias se nenhum provedor fizer uma proposta.</p>
+          <p>Caso você receba respostas, esta duração será extendida.</p>
+        </div>, 'Atenção', () => window.location.replace('/user'))
       })
     })
     .catch(err => {
