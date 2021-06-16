@@ -234,7 +234,7 @@ export default function UserMain () {
       
       displayAlert(<p>{successFeedback}</p>, 'Sucesso', () => {
         displayAlert(<div>
-          <p>O seu serviço irá expirar depois de 3 dias se nenhum provedor fizer uma proposta.</p>
+          <p>O seu serviço irá expirar depois de 2 dias se nenhum provedor fizer uma proposta.</p>
           <p>Caso você receba respostas, esta duração será extendida.</p>
         </div>, 'Atenção', () => window.location.replace('/user'))
       })

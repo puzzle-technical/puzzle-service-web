@@ -467,10 +467,10 @@ export default function Profile () {
 
     {userType == 1 && <section className="signup-section">
       <h2>Trabalho</h2>
-      <div className="">
+      {/* <div className="">
         <h3 className="signup-label">Avaliações</h3>
         <Stars idRated={user.idUser}></Stars>
-      </div>
+      </div> */}
       <div className="row">
         <div className="fluid">
           <h3 className="signup-label">Áreas de atuação</h3>
